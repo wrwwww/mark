@@ -1,0 +1,55 @@
+/* ================================
+   mdnice / Mac 风格代码块（修正版）
+   ================================ */
+
+/* 代码块容器 */
+pre {
+  position: relative;
+  background: #2b2f36;
+  border-radius: 10px;
+
+  /* ⬇️ 关键：给标题栏预留空间 */
+  padding: 48px 16px 16px 16px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  overflow: auto;
+}
+
+/* Mac 三色按钮（标题栏） */
+pre::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: 16px;
+
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff5f56;
+
+  box-shadow:
+    20px 0 0 #ffbd2e,
+    40px 0 0 #27c93f;
+
+  /* ⬇️ 确保不会抢焦点 */
+  pointer-events: none;
+}
+
+/* 正文代码 */
+pre code {
+  display: block;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #e6edf3;
+  background: transparent;
+}
+
+/* 行内代码不受影响 */
+code:not(pre code) {
+  background: rgba(77, 163, 255, 0.15);
+  color: #2563eb;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+

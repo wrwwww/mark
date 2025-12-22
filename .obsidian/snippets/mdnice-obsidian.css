@@ -1,0 +1,126 @@
+/* =========================================================
+   mdnice → Obsidian 全套风格
+   作者：给“风吹麦浪”定制 😄
+   ========================================================= */
+
+/* ========== 1️⃣ 背景网格（阅读 + 编辑） ========== */
+
+/* 阅读模式 */
+.markdown-preview-view,
+.markdown-reading-view {
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* 编辑模式（CM6 / Live Preview） */
+.markdown-source-view.mod-cm6,
+.markdown-source-view.mod-cm6 .cm-scroller {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* 深色模式 */
+.theme-dark .markdown-preview-view,
+.theme-dark .markdown-reading-view,
+.theme-dark .markdown-source-view.mod-cm6,
+.theme-dark .markdown-source-view.mod-cm6 .cm-scroller {
+  background-color: #1e1e1e;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+/* ========== 2️⃣ mdnice 蓝条标题（h3） ========== */
+
+.markdown-preview-view h3,
+.markdown-source-view.mod-cm6 .cm-header-3 {
+  position: relative;
+  padding-left: 14px;
+  font-weight: 600;
+}
+
+.markdown-preview-view h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 15%;
+  width: 4px;
+  height: 70%;
+  background-color: #4da3ff;
+  border-radius: 2px;
+}
+
+/* 编辑态蓝条 */
+.markdown-source-view.mod-cm6 .cm-header-3::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 1.2em;
+  background-color: #4da3ff;
+  border-radius: 2px;
+  margin-right: 8px;
+}
+
+/* ========== 3️⃣ Mac / mdnice 风格代码块 ========== */
+
+pre {
+  border-radius: 8px;
+  padding: 14px;
+  background: #f7f8fa;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04);
+}
+
+.theme-dark pre {
+  background: #2b2b2b;
+}
+
+pre code {
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 0.9em;
+}
+
+/* ========== 4️⃣ 引用块（mdnice 风） ========== */
+
+blockquote {
+  border-left: 4px solid #4da3ff;
+  background: rgba(77, 163, 255, 0.08);
+  padding: 8px 14px;
+  border-radius: 4px;
+}
+
+/* ========== 5️⃣ 提示块（INFO / WARN / ERROR） ========== */
+
+.callout[data-callout="info"] {
+  border-left-color: #4da3ff;
+}
+
+.callout[data-callout="warning"] {
+  border-left-color: #ffb300;
+}
+
+.callout[data-callout="danger"] {
+  border-left-color: #ff5252;
+}
+
+/* ========== 6️⃣ 表格优化（mdnice） ========== */
+
+table {
+  border-collapse: collapse;
+  background: #fff;
+}
+
+table th {
+  background: #f2f5f9;
+  font-weight: 600;
+}
+
+table th,
+table td {
+  border: 1px solid #e5e7eb;
+  padding: 6px 10px;
+}

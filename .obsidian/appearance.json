@@ -1,0 +1,13 @@
+{
+  "cssTheme": "Cupertino",
+  "accentColor": "#157550",
+  "interfaceFontFamily": "PingFang UI SC",
+  "monospaceFontFamily": "JetBrains Mono",
+  "enabledCssSnippets": [
+    "mdnice-obsidian",
+    "mdnice-codeblock",
+    "one",
+    "theme-color-table"
+  ],
+  "showRibbon": false
+}
