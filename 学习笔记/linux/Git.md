@@ -723,6 +723,17 @@ git config --global user. name 'wrw' # 初始化用户名
 
 ---
 
+## 删除本地仓库
+
+我想删除本地仓库的版本管理
+```bash
+rm -rf .git 
+```
+
+```powershell
+Remove-Item .git -Recurse -Force
+```
+
 ## 案例
 
 ### 克隆远程仓库并开始开发
