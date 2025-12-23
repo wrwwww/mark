@@ -259,6 +259,329 @@ docker rmi <image_id>
 docker rm name
 ```
 
+# 常用命令
+
+## docker volume（数据卷管理）
+
+### **1. 基本操作**
+
+```bash
+# 查看所有数据卷
+docker volume ls
+
+# 创建数据卷
+docker volume create my-volume
+
+# 查看数据卷详情
+docker volume inspect my-volume
+# 输出：挂载点、驱动、标签等信息
+
+# 删除数据卷
+docker volume rm my-volume
+# 强制删除（即使有容器在使用）
+docker volume rm -f my-volume
+
+# 删除所有未使用的数据卷
+docker volume prune
+```
+
+### **2. 数据卷使用示例**
+
+```bash
+# 创建并使用数据卷
+docker run -d \
+  --name mysql \
+  -v mysql-data:/var/lib/mysql \  # 使用命名卷
+  mysql:8.0
+
+# 挂载宿主机目录
+docker run -d \
+  --name nginx \
+  -v /host/path:/container/path:ro \  # 只读挂载
+  -v /host/path2:/container/path2:rw \ # 读写挂载（默认）
+  nginx
+
+# 临时文件系统（tmpfs）
+docker run -d \
+  --name tmpfs-test \
+  --tmpfs /tmp:size=100m,mode=1777 \
+  alpine
+
+# 使用多个数据卷
+docker run -d \
+  --name app \
+  -v config:/app/config \
+  -v data:/app/data \
+  -v logs:/app/logs \
+  myapp
+```
+
+### **3. 高级卷操作**
+
+```
+# 从容器复制数据到卷
+docker run --rm -v my-volume:/data alpine cp /etc/hosts /data/
+
+# 备份数据卷
+docker run --rm \
+  -v my-volume:/source \
+  -v $(pwd):/backup \
+  alpine tar czf /backup/backup.tar.gz -C /source .
+
+# 恢复数据卷
+docker run --rm \
+  -v my-volume:/target \
+  -v $(pwd):/backup \
+  alpine tar xzf /backup/backup.tar.gz -C /target
+
+# 卷之间复制数据
+docker run --rm \
+  -v source-volume:/source \
+  -v target-volume:/target \
+  alpine cp -a /source/. /target/
+```
+
+### **4. 卷驱动插件**
+
+```bash
+
+# 查看可用驱动
+docker volume ls --filter driver=local
+
+# 使用不同驱动创建卷
+docker volume create \
+  --driver local \
+  --opt type=nfs \
+  --opt o=addr=192.168.1.100,rw \
+  --opt device=:/path/to/share \
+  nfs-volume
+```
+
+## docker network（网络管理）
+
+### 基本操作
+
+```bash
+# 查看所有网络
+docker network ls
+# 输出：网络ID、名称、驱动、作用域
+
+# 查看网络详情
+docker network inspect bridge
+# 输出：子网、网关、连接的容器等
+
+# 创建网络
+docker network create my-network
+# 指定驱动和子网
+docker network create \
+  --driver bridge \
+  --subnet 172.20.0.0/16 \
+  --gateway 172.20.0.1 \
+  custom-network
+
+# 删除网络
+docker network rm my-network
+# 强制删除（即使有容器连接）
+docker network rm -f my-network
+
+# 删除所有未使用的网络
+docker network prune
+
+```
+
+### 网络类型
+
+```bash
+# 1. bridge网络（默认）
+docker network create --driver bridge isolated-net
+
+# 2. host网络（共享宿主机网络栈）
+docker run -d --network host nginx
+
+# 3. none网络（无网络）
+docker run -d --network none alpine
+
+# 4. overlay网络（Swarm集群）
+docker network create --driver overlay swarm-net
+
+# 5. macvlan网络（物理网络直接访问）
+docker network create \
+  --driver macvlan \
+  --subnet=192.168.1.0/24 \
+  --gateway=192.168.1.1 \
+  -o parent=eth0 \
+  macvlan-net
+
+```
+
+### 容器网络操作
+
+```bash
+# 运行容器时连接网络
+docker run -d \
+  --name web \
+  --network my-network \
+  nginx
+
+# 连接容器到网络
+docker network connect my-network existing-container
+
+# 断开网络连接
+docker network disconnect my-network container
+
+# 查看容器网络信息
+docker inspect container-name | grep -A 10 "Networks"
+
+# 为容器设置别名
+docker run -d \
+  --name app \
+  --network my-network \
+  --network-alias app-server \
+  myapp
+
+# 连接多个网络
+docker network connect net1 container
+docker network connect net2 container
+```
+
+### 网络配置示例
+
+```bash
+# 创建用于微服务的网络
+docker network create \
+  --driver bridge \
+  --subnet 10.10.0.0/24 \
+  --gateway 10.10.0.1 \
+  --ip-range 10.10.0.128/25 \
+  --label env=production \
+  backend-net
+
+# 运行服务
+docker run -d \
+  --name api \
+  --network backend-net \
+  --ip 10.10.0.10 \
+  api-service
+
+docker run -d \
+  --name db \
+  --network backend-net \
+  --ip 10.10.0.20 \
+  postgres
+
+# 测试网络连通性
+docker exec api ping db  # 通过容器名访问
+docker exec api ping 10.10.0.20  # 通过IP访问
+```
+
+## docker inspect（详细信息查看）
+
+### 基本用法
+
+```bash
+# 查看容器详细信息
+docker inspect container-name
+docker inspect container-id
+
+# 查看镜像详细信息
+docker inspect image-name:tag
+docker inspect image-id
+
+# 查看网络/卷/其他对象
+docker inspect network-name
+docker inspect volume-name
+```
+
+### 格式化输出
+
+```bash
+# 仅获取特定信息
+docker inspect --format='{{.Name}}' container
+docker inspect --format='{{.NetworkSettings.IPAddress}}' container
+
+# 获取JSON格式的特定部分
+docker inspect --format='{{json .NetworkSettings}}' container
+
+# 获取多个信息
+docker inspect --format='容器: {{.Name}} IP: {{.NetworkSettings.IPAddress}}' container
+```
+
+### 常用查询路径
+
+```bash
+# 容器状态信息
+docker inspect --format='{{.State.Status}}' container  # 运行状态
+docker inspect --format='{{.State.Pid}}' container     # 进程ID
+docker inspect --format='{{.State.StartedAt}}' container  # 启动时间
+
+# 网络信息
+docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container
+docker inspect --format='{{.NetworkSettings.Ports}}' container  # 端口映射
+
+# 配置信息
+docker inspect --format='{{.Config.Image}}' container  # 使用的镜像
+docker inspect --format='{{.Config.Cmd}}' container    # 启动命令
+docker inspect --format='{{.Config.Entrypoint}}' container  # 入口点
+docker inspect --format='{{.Config.Env}}' container    # 环境变量
+
+# 挂载点信息
+docker inspect --format='{{.Mounts}}' container
+docker inspect --format='{{json .Mounts}}' container | jq  # 使用jq格式化
+
+# 资源限制
+docker inspect --format='{{.HostConfig.Memory}}' container  # 内存限制
+docker inspect --format='{{.HostConfig.NanoCpus}}' container  # CPU限制
+```
+### 高级查询
+
+```bash
+# 遍历数组/映射
+docker inspect --format='{{range .Mounts}}{{.Source}} -> {{.Destination}}{{"\n"}}{{end}}' container
+
+# 条件判断
+docker inspect --format='{{if .State.Running}}Running{{else}}Stopped{{end}}' container
+
+# 索引访问
+docker inspect --format='{{index .Config.Env 0}}' container  # 第一个环境变量
+
+# 大小写转换
+docker inspect --format='{{upper .Name}}' container
+docker inspect --format='{{lower .Config.Image}}' container
+
+# 切片操作
+docker inspect --format='{{slice .Id 0 12}}' container  # 获取短ID
+```
+
+### 使用脚本示例
+
+```shell
+#!/bin/bash
+# 获取所有运行中容器的基本信息
+for container in $(docker ps -q); do
+  name=$(docker inspect --format='{{.Name}}' $container | sed 's/\///')
+  ip=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' $container)
+  image=$(docker inspect --format='{{.Config.Image}}' $container)
+  status=$(docker inspect --format='{{.State.Status}}' $container)
+  echo "容器: $name | IP: $ip | 镜像: $image | 状态: $status"
+done
+
+# 输出示例：
+# 容器: web | IP: 172.17.0.2 | 镜像: nginx:alpine | 状态: running
+```
+
+```shell
+#!/bin/bash
+# 检查容器的资源使用情况
+container=$1
+
+echo "=== 容器: $(docker inspect --format='{{.Name}}' $container) ==="
+echo "内存限制: $(docker inspect --format='{{.HostConfig.Memory}}' $container) bytes"
+echo "CPU限制: $(docker inspect --format='{{.HostConfig.NanoCpus}}' $container) nano CPUs"
+echo "重启策略: $(docker inspect --format='{{.HostConfig.RestartPolicy.Name}}' $container)"
+echo "挂载点:"
+docker inspect --format='{{range .Mounts}}{{printf "  %s -> %s\n" .Source .Destination}}{{end}}' $container
+```
+
 # compose
 
 1. 上线

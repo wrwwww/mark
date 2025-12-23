@@ -612,11 +612,11 @@ Linux系统安装完毕，需要对Linux系统进行管理和维护，让Linux�
 
 不管是Windows还是Linux操作系统，底层设备一般均为物理硬件，操作系统启动之前会对硬件进行检测，然后硬盘引导启动操作系统，如下为操作系统启动相关的各个概念：
 
-### 3.1.1  BIOS
+### BIOS
 
 基本输入输出系统（Basic Input Output System，BIOS）是一组固化到计算机主板上的只读内存[镜像](http://baike.baidu.com/item/%E9%95%9C%E5%83%8F/1574)（Read Only Memory image，ROM）芯片上的程序，它保存着计算机最重要的基本输入输出的程序、系统设置信息、开机后自检程序和系统自启动程序。主要功能是为计算机提供最底层的、最直接的硬件设置和控制。
 
-### 3.1.2  MBR
+### MBR
 
 全新硬盘在使用之前必须进行分区格式化，硬盘分区初始化的格式主要由两种，分别是：MBR格式和GPT格式。
 
@@ -632,7 +632,7 @@ MBR是计算机启动最先执行的硬盘上的程序，只有512字节大小�
 
 因为MBR分区标准决定了MBR只支持在2TB以下的硬盘，对于后面的多余空间只能浪费。为了支持能使用大于2T硬盘空间，微软和英特尔公司在可扩展固件接口(Extensible Firmware Interface，EFI)方案中开发了全局唯一的标识符（Globally unique identifier，GUID），进而全面支持大于2T硬盘空间在企业中使用。
 
-### 3.1.3  GPT
+### GPT
 
 全局唯一的标识符（Globally unique identifier，GUID），正逐渐取代MBR成为新标准。它和统一的可扩展固件接口 (Unified Extensible Firmware Interface,UEFI)相辅相成。
 
@@ -648,7 +648,7 @@ GPT优点支持2T以上磁盘，如果使用Fdisk分区，最大只能建立2TB�
 
 图3-2 GPT分区表内容
 
-### 3.1.4  GRUB
+### GRUB
 
 GNU项目的多操作系统启动程序（GRand Unified Bootloader，GRUB），可以支持多操作系统的引导，它允许用户可以在[计算机](http://baike.baidu.com/view/3314.htm)内同时拥有多个[操作系统](http://baike.baidu.com/view/880.htm)，并在计算机启动时选择希望运行的操作系统。
 
@@ -1992,17 +1992,17 @@ RPM企业案例演示：
 
 Linux操作系统除了使用RPM管理工具对软件包管理之外，还可以通过tar、zip、jar等工具进行源码包的管理。
 
-### 6.2.1  Tar命令参数详解
+### Tar命令参数详解
 
 |-A, --catenate, --concatenate         将存档与已有的存档合并<br><br>-c, --create                       建立新的存档<br><br>-d, --diff, --compare             比较存档与当前文件的不同之处<br><br>--delete                     从存档中删除<br><br>-r, --append                 附加到存档结尾<br><br>-t, --list                            列出存档中文件的目录<br><br>-u, --update                 仅将较新的文件附加到存档中<br><br>-x, --extract, --get                  解压文件<br><br>-j, --bzip2, --bunzip2            有bz2属性的软件包；<br><br>-z, --gzip, --ungzip                  有gz属性的软件包；<br><br>-b, --block-size N              指定块大小为 Nx512 字节（缺省时 N=20)；<br><br>-B, --read-full-blocks               读取时重组块；<br><br>-C, --directory DIR             指定新的目录；<br><br>--checkpoint                 读取存档时显示目录名；<br><br>-f, --file [HOSTNAME:]F        指定存档或设备，后接文件名称；<br><br>--force-local                   强制使用本地存档，即使存在克隆；<br><br>-G, --incremental              建立老 GNU 格式的备份；<br><br>-g, --listed-incremental             建立新 GNU 格式的备份；<br><br>-h, --dereference              不转储动态链接，转储动态链接指向的文件；<br><br>-i, --ignore-zeros                  忽略存档中的 0 字节块（通常意味着文件结束）；<br><br>--ignore-failed-read               在不可读文件中作 0 标记后再退出；<br><br>-k, --keep-old-files                 保存现有文件；从存档中展开时不进行覆盖；<br><br>-K, --starting-file F            从存档文件 F 开始；<br><br>-l, --one-file-system                在本地文件系统中创建存档；<br><br>-L, --tape-length N            在写入 N*1024 个字节后暂停，等待更换磁盘；<br><br>-m, --modification-time          当从一个档案中恢复文件时，不使用新的时间标签；<br><br>-M, --multi-volume                建立多卷存档,以便在几个磁盘中存放；<br><br>-O, --to-stdout                将文件展开到标准输出；<br><br>-P, --absolute-paths                不要从文件名中去除 '/'；<br><br>-v, --verbose                       详细显示处理的文件；<br><br>--version                            显示tar 程序的版本号；<br><br>--exclude                    FILE不把指定文件包含在内；<br><br>-X, --exclude-from FILE             从指定文件中读入不想包含的文件的列表。|
 |---|
 
-### 6.2.2  TAR企业案例演示
+### TAR企业案例演示
 
 |tar      -cvf     jfedu.tar.gz          jfedu        打包jfedu文件或者目录，打包后名称jfedu.tar.gz；<br><br>tar      -tf      jfedu.tar.gz                             查看jfedu.tar.gz包中内容；<br><br>tar      -rf      jfedu.tar.gz          jfedu.txt              将jfedu.txt文件追加到jfedu.tar.gz中<br><br>tar      -xvf     jfedu.tar.gz                        解压jfedu.tar.gz程序包；<br><br>tar      -czvf   jfedu.tar.gz          jfedu        使用gzip格式打包并压缩jfedu目录；<br><br>tar      -cjvf    jfedu.tar.bz2         jfedu        使用bzip2格式打包并压缩jfedu目录；<br><br>tar      -czf    jfedu.tar.gz * -X      list.txt          使用gzip格式打包并压当前目录所有文件，排除list.txt中记录的文件；<br><br>tar      -czf    jfedu.tar.gz    *  --exclude=zabbix-3.2.4.tar.gz --exclude=nginx-1.16.0.tar.gz                  使用gzip格式打包并压当前目录所有文件及目录，排除zabbix-3.2.4.tar.gz和nginx-1.16.0.tar.gz软件包。|
 |---|
 
-### 6.2.3  TAR实现Linux系统备份
+### TAR实现Linux系统备份
 
 Tar命令工具除了用于日常打包、解压源码包或者压缩包之外，最大的亮点是还可以用于Linux操作系统文件及目录的备份，使用tar -g可以基于GNU 格式的增量备份，备份原理是基于检查目录或者文件的atime、mtime、ctime属性是否被修改。文件及目录时间属性详解如下：
 
@@ -2038,7 +2038,7 @@ q  文件写入、权限更改的时间（Change time，ctime)。
 
 如上图6-3所示，增量备份时，需-g指定第一次完整备份的快照snapshot文件，同时增量打包的文件名不能跟第一次备份后的文件名重复，通过tar –tf可以查看打包后的文件内容。
 
-### 6.2.4  Shell+TAR实现增量备份
+### Shell+TAR实现增量备份
 
 企业中日常备份的数据包括/boot、/etc、/root、/data目录等，备份的策略参考：每周1-6执行增量备份，每周日执行全备份。同时在企业中备份操作系统数据均使用Shell脚本完成，此处auto_backup_system.sh脚本供参考，后面章节会系统讲解Shell脚本，脚本内容如下：
 
@@ -2124,7 +2124,7 @@ ZIP企业案例演示：
 
 使用RPM工具管理和安装软件时，会发现rpm包有依赖，需要逐个手动下载安装，而YUM工具的最大便利就是可以自动安装所有依赖的软件包，从而提升效率，节省时间。
 
-### 6.5.1  YUM工作原理
+### YUM工作原理
 
 学习YUM，一定要理解YUM工作原理，YUM正常运行，需要依赖两个部分，一是YUM源端，二是YUM客户端，也即用户使用端。
 
@@ -2134,14 +2134,14 @@ YUM客户端需要安装软件或者搜索软件，会查找/etc/yum.repos.d下�
 
 YUM客户端如果配置了CentOS官方repo源，客户端操作系统必须能联外网，满足网络条件，才能下载软件并安装，如果没有网络，也可以构建光盘源或者内部YUM源。在只要YUM客户端时，YUM客户端安装软件，默认会把YUM源地址、Header信息、软件包、数据库信息、缓存文件存储在/var/cache/yum中，每次使用YUM工具，YUM优先通过Cache查找相关软件包，Cache中不存在，然后在访问外网YUM源。
 
-### 6.5.2  配置YUM源（仓库）
+### 配置YUM源（仓库）
 
 |# 配置本地镜像仓库：<br><br>[root@www-jfedu-net ~]# mount /dev/cdrom /mnt<br><br>mount: /dev/sr0 写保护，将以只读方式挂载<br><br># 在仓库目录下创建本地仓库文件，内容如下：<br><br>[root@www-jfedu-net ~]# cat  /etc/yum.repos.d/local.repo<br><br>[local]<br><br>name=centos-$releasever-local<br><br>baseurl=file:///mnt<br><br>gpgcheck=1<br><br>gpgkey=file:///mnt/RPM-GPG-KEY-CentOS-$releasever<br><br>#  查看仓库情况：<br><br>[root@www-jfedu-net ~]# yum repolist \| grep local<br><br>local                        centos-7-local                              4,071|
 |---|
 |## 配置centos的base仓库，以下两个仓库任意配置一个即可，因为仓库ID不能冲突，配置多个也只有一个生效：<br><br># 安装163的yum源：<br><br>wget -O /etc/yum.repos.d/CentOS7-Base-163.repo [http://mirrors.163.com/.help/CentOS7-Base-163.repo](http://mirrors.163.com/.help/CentOS7-Base-163.repo)<br><br># 安装阿里云的yum源：<br><br>wget -O /etc/yum.repos.d/CentOS-Base.repo [http://mirrors.aliyun.com/repo/Centos-7.repo](http://mirrors.aliyun.com/repo/Centos-7.repo)|
 |## 配置epel扩展仓库：<br><br># centos 7：<br><br>wget -O /etc/yum.repos.d/epel.repo [http://mirrors.aliyun.com/repo/epel-7.repo](http://mirrors.aliyun.com/repo/epel-7.repo)<br><br># centos 8：<br><br>yum install -y [https://mirrors.aliyun.com/epel/epel-release-latest-8.noarch.rpm](https://mirrors.aliyun.com/epel/epel-release-latest-8.noarch.rpm)<br><br>sed -i 's\|^#baseurl=https://download.fedoraproject.org/pub\|baseurl=https://mirrors.aliyun.com\|' /etc/yum.repos.d/epel*<br><br>sed -i 's\|^metalink\|#metalink\|' /etc/yum.repos.d/epel*|
 
-### 6.5.3  YUM企业案例演练
+### YUM企业案例演练
 
 由于YUM工具的使用简便、快捷、高效，在企业中得到广泛的使用，得到众多IT运维、程序人员的青睐，要能熟练使用YUM工具，需要先掌握YUM命令行参数的使用，如下为YUM命令工具的参数详解及实战步骤：
 
@@ -2538,14 +2538,14 @@ parted命令行也可以进行分区，如图7-15（a）、7-15（b）、7-15（
 
 Mount命令工具主要用于将设备或者分区挂载至Linux系统目录下，Linux系统在分区时，也是基于mount机制将/dev/sda分区挂载至系统目录，将设备与目录挂载之后，Linux操作系统方可进行文件的存储。
 
-### 7.7.1  Mount命令参数详解
+### Mount命令参数详解
 
 如下为企业中Mount命令常用参数详解：
 
 |mount [-Vh]<br><br>mount -a [-fFnrsvw] [-t vfstype]<br><br>mount [-fnrsvw] [-o options [,...]] device \| dir<br><br>mount [-fnrsvw] [-t vfstype] [-o options] device dir<br><br>-V：                              显示mount工具版本号；<br><br>-l：                               显示已加载的文件系统列表；<br><br>-h：                                  显示帮助信息并退出；<br><br>-v：                                   输出指令执行的详细信息；<br><br>-n：                                  加载没有写入文件/etc/mtab中的文件系统；<br><br>-r：                                   将文件系统加载为只读模式；<br><br>-a：                                   加载文件/etc/fstab中配置的所有文件系统；<br><br>-o:                                指定mount挂载扩展参数，常见扩展指令：rw、remount、loop等，其中-o相关指令如下：<br><br>-o atime：                          系统会在每次读取文档时更新文档时间；<br><br>-o noatime：                           系统会在每次读取文档时不更新文档时间；<br><br>-o defaults:                              使用预设的选项 rw,suid,dev,exec,auto,nouser等；<br><br>-o exec                         允许执行档被执行；<br><br>-o user、-o nouser：                使用者可以执行 mount/umount的动作；<br><br>-o remount：                           将已挂载的系统分区重新以其他再次模式挂载；<br><br>-o ro：                               只读模式挂载；<br><br>-o rw：                                   可读可写模式挂载；<br><br>-o loop                          使用loop模式，把文件当成设备挂载至系统目录。<br><br>-t：                                   指定mount挂载设备类型，常见类型nfs、ntfs-3g、vfat、iso9660等，其中-t相关指令如下：<br><br>iso9660                         光盘或光盘镜像；<br><br>msdos                              Fat16文件系统；<br><br>vfat                            Fat32文件系统；<br><br>ntfs                                 NTFS文件系统；<br><br>ntfs-3g                          识别移动硬盘格式；<br><br>smbfs                         挂载Windows文件网络共享；<br><br>nfs                              Unix/Linux文件网络共享。|
 |---|
 
-### 7.7.2  企业常用Mount案例
+### 企业常用Mount案例
 
 Mount常用案例演示如下：
 
@@ -2927,7 +2927,7 @@ q  多线程，无需跨进程，程序逻辑和控制方式简单，所有线
 
 FTP服务是Client/Server（简称C/S）模式，基于FTP协议实现FTP文件对外共享及传输的软件称之为FTP服务器源端，客户端程序基于FTP协议，则称之为FTP客户端，FTP客户端可以向FTP服务器上传、下载文件。
 
-### 12.2.1        FTP传输模式
+### FTP传输模式
 
 FTP基于C/S模式，FTP客户端与服务器端有两种传输模式，分别是FTP主动模式、FTP被动模式，主被动模式均是以FTP服务器端为参照。主被动模式如图12-2（a）、12-2（b）所示，主被动模式详细区别如下：
 
@@ -2943,7 +2943,7 @@ q  FTP被动模式：客户端从一个任意的端口N（N>1024）连接到FT
 
 ![](学习笔记/Attachments/1737817677507-4f084e1a-4feb-4bac-97e7-36140e678c8c.png)图12-2（b） FTP被动模式
 
-### 12.2.2        Vsftpd服务器简介
+### Vsftpd服务器简介
 
 目前主流的FTP服务器端软件包括：Vsftpd、ProFTPD、PureFTPd、Wuftpd、Server-U FTP、 FileZilla Server等软件，其中Unix/Linux使用较为广泛的FTP服务器端软件为Vsftpd 。
 
@@ -2951,7 +2951,7 @@ q  FTP被动模式：客户端从一个任意的端口N（N>1024）连接到FT
 
 Vsftpd基于GPL开源协议发布，在中小企业中得到广泛的应用，Vsftpd可以快速上手，基于Vsftpd虚拟用户方式，访问验证更加安全。Vsftpd还可以基于MYSQL数据库做安全验证，多重安全防护。
 
-### 12.2.3        Vsftpd服务器安装配置
+### Vsftpd服务器安装配置
 
 Vsftpd服务器端安装有两种方法，一是基于YUM方式安装，而是基于源码编译安装，最终实现效果完全一致，本文采用YUM安装Vsftpd，步骤如下：
 
@@ -2986,7 +2986,7 @@ FTP主被动模式，默认为主动模式，设置为被动模式使用端口�
 |pasv_enable=YES<br><br>pasv_min_port=60000<br><br>pasv_max_port=60100|
 |---|
 
-### 12.2.4        Vsftpd匿名用户配置
+### Vsftpd匿名用户配置
 
 Vsftpd默认以匿名用户访问，匿名用户默认访问的FTP服务器端路径为：/var/ftp/pub，匿名用户只有查看权限，无法创建、删除、修改。如需关闭FTP匿名用户访问，需修改配置文件/etc/vsftpd/vsftpd.conf，将anonymous_enable=YES修改为anonymous_enable=NO，重启Vsftpd服务即可。
 
@@ -3011,7 +3011,7 @@ Vsftpd默认以匿名用户访问，匿名用户默认访问的FTP服务器端�
 
 图12-6 匿名用户访问上传文件
 
-### 12.2.5        Vsftpd系统用户配置
+### Vsftpd系统用户配置
 
 Vsftpd匿名用户设置完毕，匿名用户，任何人都可以查看FTP服务器端的文件、目录，甚至可以修改、删除，此方案如适合存放私密文件在FTP服务器端，如何保证文件或者目录专属拥有者呢，Vsftpd系统用户可以实现该需求。
 
@@ -3033,7 +3033,7 @@ Vsftpd匿名用户设置完毕，匿名用户，任何人都可以查看FTP服�
 
 ![](学习笔记/Attachments/1737817678934-a8fc9747-07fb-4c12-958c-bc52c70709c9.png)图12-7（b） jfedu1登录FTP服务器上传文件
 
-### 12.2.6        Vsftpd虚拟用户配置
+### Vsftpd虚拟用户配置
 
 如果基于Vsftpd系统用户访问FTP服务器，系统用户越多越不利于管理，而且不利于系统安全管理，鉴于此，为了能更加的安全使用VSFTPD，需使用Vsftpd虚拟用户方式。
 

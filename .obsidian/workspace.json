@@ -4,21 +4,23 @@
     "type": "split",
     "children": [
       {
-        "id": "8bcd7cc500577c30",
+        "id": "25cffbc0d033356e",
         "type": "tabs",
         "children": [
           {
-            "id": "c03f7c427c41588a",
+            "id": "3974eeb9ac306305",
             "type": "leaf",
+            "pinned": true,
             "state": {
               "type": "markdown",
               "state": {
-                "file": "学习笔记/linux/Git.md",
+                "file": "学习笔记/linux/1.Linux.md",
                 "mode": "source",
                 "source": false
               },
+              "pinned": true,
               "icon": "lucide-file",
-              "title": "Git"
+              "title": "1.Linux"
             }
           }
         ]
@@ -53,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "linux",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -80,17 +82,16 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "学习笔记/linux/Git.md",
-                "followCursor": false,
+                "file": "学习笔记/linux/1.Linux.md",
+                "followCursor": true,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Git 的大纲"
+              "title": "1.Linux 的大纲"
             }
           }
-        ],
-        "currentTab": 3
+        ]
       }
     ],
     "direction": "horizontal",
@@ -173,14 +174,20 @@
       "obsidian-excalidraw-plugin:新建绘图文件": false
     }
   },
-  "active": "631e8f640bf81899",
+  "active": "e7f3fe97b1d46f20",
   "lastOpenFiles": [
-    "学习笔记/linux/配置静态ip.md",
-    "学习笔记/linux/1.Linux.md",
-    "学习笔记/linux/Jenkins.md",
-    "学习笔记/linux/运维.md",
-    "学习笔记/linux/Linux.md",
+    "学习笔记/linux/mongoDB.md",
+    "未命名",
     "学习笔记/linux/Linux从入门到精通.md",
+    "学习笔记/linux/Kubernetes.md",
+    "学习笔记/linux/Jenkins.md",
+    "学习笔记/linux/Docker.md",
+    "学习笔记/linux/运维.md",
+    "学习笔记/linux/1.Linux.md",
+    "remove_header_numbers.py",
+    "学习笔记/linux/配置静态ip.md",
+    "学习笔记/linux/Git.md",
+    "学习笔记/linux/Linux.md",
     "学习笔记/android/Android.md",
     "学习笔记/android/Android进程初解.md",
     "index.base",
@@ -204,10 +211,6 @@
     "import1/学习笔记/Attachments/640.png",
     "import1/学习笔记/Java/SSM.md",
     "import1/学习笔记/Java/SpringMVC.md",
-    "学习笔记/backend/SpringBoot.md",
-    "学习笔记/backend/SpringBoot.md",
-    "import1/学习笔记/工具框架/maven.md",
-    "import1/学习笔记/工具框架/Gradle.md",
     "import1/计算机/Attachments/1671022403335-2b195d7f-1202-40d3-b681-8ff1e87fcad6.png",
     "import1/计算机/Attachments/1670897072848-5fa54c5c-1d86-4040-b431-3bec6c339581.png",
     "import1/计算机/Attachments/1670648077488-bbeedf7f-34bc-4dfb-9b50-eabbbbe55ec9.png",
@@ -219,8 +222,6 @@
     "学习笔记/rust",
     "学习笔记/front",
     "学习笔记/包管理工具",
-    "学习笔记/backend",
-    "学习笔记/碎片化",
     "未命名.canvas"
   ]
 }

@@ -68,7 +68,7 @@ Spring Boot 会自动扫描这些类，判断是否需要加载。
 
 Spring Boot 启动流程中，`SpringApplication.run()` 会触发：
 
-### 3.1 读取所有 AutoConfiguration
+### 读取所有 AutoConfiguration
 
 从以下文件加载所有自动配置类：
 
@@ -76,7 +76,7 @@ Spring Boot 启动流程中，`SpringApplication.run()` 会触发：
 META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
 ```
 
-### 3.2 逐个做条件判断
+### 逐个做条件判断
 
 对每个配置类执行：
 
@@ -85,7 +85,7 @@ META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
 - 配置文件是否满足要求?
 - 环境是否是 Web 环境?
 
-### 3.3 满足条件 → 注册 Bean
+### 满足条件 → 注册 Bean
 
 不满足条件 → 跳过
 
