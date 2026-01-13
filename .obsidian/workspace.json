@@ -24,21 +24,53 @@
             }
           },
           {
-            "id": "6abed4da7f625092",
+            "id": "66006a68a7387b7e",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "学习笔记/linux/Redis.md",
+                "file": "学习笔记/linux/配置静态ip.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Redis"
+              "title": "配置静态ip"
+            }
+          },
+          {
+            "id": "7d745ff49bc8f5cd",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "学习笔记/linux/Apache SeaTunnel.md",
+                "mode": "source",
+                "source": false
+              },
+              "pinned": true,
+              "icon": "lucide-file",
+              "title": "Apache SeaTunnel"
+            }
+          },
+          {
+            "id": "8b8e137278109358",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "学习笔记/linux/MySQL.md",
+                "mode": "source",
+                "source": false
+              },
+              "pinned": true,
+              "icon": "lucide-file",
+              "title": "MySQL"
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -70,7 +102,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "find",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -97,13 +129,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "学习笔记/linux/Redis.md",
+                "file": "学习笔记/linux/Apache SeaTunnel.md",
                 "followCursor": true,
-                "showSearch": true,
+                "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Redis 的大纲"
+              "title": "Apache SeaTunnel 的大纲"
             }
           }
         ]
@@ -202,12 +234,18 @@
   },
   "active": "e7f3fe97b1d46f20",
   "lastOpenFiles": [
+    "学习笔记/linux/MySQL.md",
+    "学习笔记/linux/Apache SeaTunnel.md",
+    "学习笔记/linux/未命名.md",
+    "学习笔记/linux/Elasticsearch.md",
     "学习笔记/linux/1.Linux.md",
+    "学习笔记/linux/mongoDB.md",
+    "学习笔记/linux/配置静态ip.md",
+    "学习笔记/碎片化/数据同步.md",
     "学习笔记/linux/Redis.md",
     "学习笔记/work/常用的表.md",
     "学习笔记/碎片化/前端直传 OSS（分片）+ 后端管控.md",
     "学习笔记/backend/RabbitMq.md",
-    "学习笔记/linux/mongoDB.md",
     "未命名",
     "学习笔记/linux/Linux从入门到精通.md",
     "学习笔记/linux/Kubernetes.md",
@@ -215,7 +253,6 @@
     "学习笔记/linux/Docker.md",
     "学习笔记/linux/运维.md",
     "remove_header_numbers.py",
-    "学习笔记/linux/配置静态ip.md",
     "学习笔记/linux/Git.md",
     "学习笔记/linux/Linux.md",
     "学习笔记/android/Android.md",
@@ -226,16 +263,11 @@
     "学习笔记/leetcode/动态规划.md",
     "学习笔记/work/红利账单运维操作.md",
     "学习笔记/work/医保实时接口升级.md",
-    "学习笔记/work/定期定额智能核定.md",
     "未命名 1.base",
     "学习笔记/Attachments/1656290576384-c15b797c-2473-4f85-88e0-c73f902096a5.png",
-    "学习笔记/rust/tokio.md",
-    "学习笔记/rust/Rust.md",
-    "学习笔记/rust/Rust.md",
     "leetcode/Attachments/1705310793927-8ac9cf6c-2daf-4165-8c90-41129a1dc55f.png",
     "leetcode/Attachments/1705308965598-686182c5-82ca-482a-8e51-a253340a9067.png",
     "leetcode/Attachments/1705289520175-9f2556be-0c79-40a7-97e1-3942cc478a29.png",
-    "import1/计算机/计算机网络.md",
     "import1/学习笔记/Attachments/640.png",
     "import1/计算机/Attachments/1671022403335-2b195d7f-1202-40d3-b681-8ff1e87fcad6.png",
     "import1/计算机/Attachments/1670897072848-5fa54c5c-1d86-4040-b431-3bec6c339581.png",

@@ -245,8 +245,6 @@ sudo firewall-cmd --reload
 
 我可以帮你整理一份 **AlmaLinux 8 上安装 MySQL 8 的最简一步到位命令脚本**，直接复制执行就能完成安装和初始化。
 
-你希望我帮你写吗？
-
 ## 1.8. 一、临时跳过公钥验证
 
 如果只是临时安装某个包，可以在命令中加参数：
@@ -556,6 +554,11 @@ select @@transaction_isolation;
 终端登录mysql`mysql -u"用户名" -p"密码" "数据库(可选)";`
 
 root 用户创建用户`create "用户名"&"localhost" identified by "123";`
+```mysql
+# repl是用户名，%表示这个用户可以登录的ip,%是通配符表示repl这个用户可以通过所有ip访问数据库
+create user 'repl'@'%' identified by '123';
+
+```
 
 单前用户修改密码`set password =password("*******");`
 
@@ -579,6 +582,35 @@ select user from user;
 delete from user where user="要删除的用户";
 -- 或者
 drop user "要删除的用户" @"localhost" ;
+```
+
+## 权限管理
+
+```mysql
+
+# 查看用户权限
+show grants 'repl'@'%';
+
+# 授权从库用户权限
+GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'repl'@'%';
+# 授权指定库的表查询权限给用户 'repl'@'%'
+GRANT SELECT ON excel.* TO 'repl'@'%';            
+GRANT SELECT ON information_schema.* TO 'repl'@'%';   
+GRANT SELECT ON performance_schema.* TO 'repl'@'%';   
+
+# 可以读取 binlog，但无法解析具体内容
+GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
+# REPLICATION CLIENT
+-- 用于查看需要获取 binlog 文件名和位置
+-- 允许执行以下命令：
+SHOW MASTER STATUS;      -- 查看主库 binlog 状态
+SHOW SLAVE STATUS;       -- 查看从库复制状态
+SHOW BINARY LOGS;        -- 查看所有 binlog 文件
+PURGE BINARY LOGS;       -- 清理 binlog（需要额外权限）
+
+# 授权库下所有权限
+GRANT ALL ON excel.* TO 'repl'@'%';
+
 ```
 
 # 7. SQL语言
@@ -848,6 +880,321 @@ update student_gb set sage=sage+1;
 ## 7.5. 相关链接
 
 1. [SQL语言：DDL、DML、DQL、DCL详解](https://zhuanlan.zhihu.com/p/391552199)
+
+## 7.6 系统变量
+
+| 命令                   | 作用             |
+| -------------------- | -------------- |
+| `SHOW VARIABLES`     | 查看系统变量         |
+| `SHOW STATUS`        | 查看运行状态计数器      |
+| `SHOW MASTER STATUS` | 查看主库 binlog 状态 |
+| `SHOW SLAVE STATUS`  | 查看从库复制状态       |
+| `SHOW PROCESSLIST`   | 查看当前连接         |
+
+
+```mysql
+
+# 返回当前 MySQL 实例中**所有可见的系统变量**及其值（包含全局和会话级别）
+SHOW VARIABLES;
+# 按名称模糊匹配变量
+SHOW VARIABLES LIKE 'max%';
+SHOW VARIABLES LIKE 'character%';
+SHOW VARIABLES LIKE '%timeout%';
+SHOW VARIABLES LIKE 'innodb%';
+# 字符集相关
+SHOW VARIABLES LIKE 'character_set%';
+SHOW VARIABLES LIKE 'collation%';
+# InnoDB 相关
+SHOW VARIABLES LIKE 'innodb%';
+# Binlog / 主从复制相关
+SHOW VARIABLES LIKE 'log_bin%';
+SHOW VARIABLES LIKE 'binlog%';
+SHOW VARIABLES LIKE 'server_id';
+# 连接与超时
+SHOW VARIABLES LIKE 'max_connections';
+SHOW VARIABLES LIKE '%timeout%';
+
+
+
+```
+
+**global**
+
+```mysql
+-- GLOBAL：实例级别
+-- 修改后仅对新连接生效
+
+SHOW GLOBAL VARIABLES;
+SHOW GLOBAL VARIABLES LIKE 'max_connections';
+
+```
+
+**session**
+
+```mysql
+-- 只影响当前会话
+SHOW SESSION VARIABLES;
+SHOW SESSION VARIABLES LIKE 'autocommit';
+
+```
+
+**查询单个变量**
+
+```mysql
+
+SELECT @@max_connections;
+SELECT @@global.max_connections;
+SELECT @@session.autocommit;
+
+```
+
+## 非CRUD命令
+
+在 **MySQL** 中，除你已经掌握的**基本增删改查（CRUD）**之外，确实还有一整套非常重要、但又“不像业务 SQL”的 **SHOW / SELECT 系统级与分析类命令**。这些命令是从“只会写表数据”迈向“理解数据库本身如何运行”的关键一步。
+
+### SHOW 类命令（了解数据库“有什么、在干嘛”）
+
+#### 数据库 / 表结构类（最重要）
+
+  查看所有数据库
+
+```sql
+SHOW DATABASES;
+```
+
+  查看当前数据库
+
+```sql
+SELECT DATABASE();
+```
+
+ 查看当前库的所有表
+
+```sql
+SHOW TABLES;
+```
+
+  查看表结构（非常常用）
+
+```sql
+DESC user;
+-- 等价
+SHOW COLUMNS FROM user;
+```
+
+  查看建表语句（强烈推荐）
+
+```sql
+SHOW CREATE TABLE user;
+```
+
+ 
+####  索引相关（性能必会）
+
+  查看表的索引
+
+```sql
+SHOW INDEX FROM user;
+```
+
+你可以看到：
+
+- 主键 / 普通索引 / 唯一索引
+    
+- 是否唯一
+    
+- 索引顺序
+    
+- 基数（Cardinality）
+    
+####  当前连接与运行状态
+
+ 查看当前连接
+
+```sql
+SHOW PROCESSLIST;
+-- 或
+SHOW FULL PROCESSLIST;
+```
+
+用途：
+
+- 查“卡住的 SQL”
+    
+- 查谁在锁表
+    
+- DBA 常用
+    
+#### 服务器运行状态（计数器）
+
+```sql
+SHOW STATUS;
+SHOW GLOBAL STATUS;
+```
+
+常用筛选：
+
+```sql
+SHOW STATUS LIKE 'Threads%';
+SHOW STATUS LIKE 'Connections';
+SHOW STATUS LIKE 'Questions';
+```
+
+---
+
+#### 系统变量（你前面已问过）
+
+```sql
+SHOW VARIABLES;
+SHOW VARIABLES LIKE 'innodb%';
+SHOW VARIABLES LIKE 'max_connections';
+```
+
+---
+
+### SELECT 类（但不是查你自己的表）
+
+#### 当前用户 / 当前实例信息
+
+```sql
+SELECT USER();        -- 登录用户
+SELECT CURRENT_USER(); -- 权限用户
+SELECT VERSION();     -- MySQL 版本
+SELECT @@hostname;    -- 主机名
+SELECT @@port;        -- 端口
+```
+
+---
+
+#### 数据库时间（生产环境常用）
+
+```sql
+SELECT NOW();
+SELECT CURDATE();
+SELECT CURTIME();
+SELECT UNIX_TIMESTAMP();
+```
+
+---
+
+#### 查看 SQL 执行计划（性能核心）
+
+```sql
+-- 性能调优必会
+EXPLAIN SELECT * FROM user WHERE id = 1;
+```
+
+
+### information_schema（元数据数据库，进阶）
+
+MySQL 自带一个“数据库的数据库”。
+
+#### 查看表大小
+
+```sql
+SELECT 
+  table_name,
+  ROUND(data_length / 1024 / 1024, 2) AS data_mb
+FROM information_schema.tables
+WHERE table_schema = 'your_db';
+```
+
+---
+
+####  查看字段信息
+
+```sql
+SELECT column_name, data_type, column_type
+FROM information_schema.columns
+WHERE table_name = 'user';
+```
+
+---
+
+#### 查看索引结构
+
+```sql
+SELECT *
+FROM information_schema.statistics
+WHERE table_name = 'user';
+```
+
+---
+
+### 事务 / 锁 / 会话相关（你下一阶段会用到）
+
+#### 查看当前事务（InnoDB）
+
+```sql
+SELECT * FROM information_schema.innodb_trx;
+```
+
+#### 查看锁
+
+```sql
+SELECT * FROM information_schema.innodb_locks;
+SELECT * FROM information_schema.innodb_lock_waits;
+```
+
+---
+
+### 非常实用但你可能没注意的命令
+
+#### 查看警告 / 错误
+
+```sql
+SHOW WARNINGS;
+SHOW ERRORS;
+```
+
+---
+
+#### 查看上一次影响的行数
+
+```sql
+SELECT ROW_COUNT();
+```
+
+---
+
+#### 查看最近执行的 SQL 数量
+
+```sql
+SHOW STATUS LIKE 'Questions';
+```
+### 查询当前 MySQL 实例中，所有正在执行 SQL 语句的连接
+
+```sql
+-- 查询当前 MySQL 实例中，所有正在执行 SQL 语句的连接（排除 Sleep、Connect 等空闲连接）。
+-- 非常适合排查：
+-- 卡住的查询 慢 SQL 锁等待
+SELECT *
+FROM information_schema.processlist
+WHERE COMMAND = 'Query';
+
+-- 查看运行超过 N 秒的 SQL（慢查询定位）
+SELECT ID, USER, HOST, DB, TIME, STATE, INFO
+FROM information_schema.processlist
+WHERE COMMAND = 'Query'
+  AND TIME > 10
+ORDER BY TIME DESC;
+-- 查锁等待（非常关键）
+SELECT ID, USER, TIME, STATE, INFO
+FROM information_schema.processlist
+WHERE STATE LIKE '%lock%';
+-- 快速 Kill 卡死 SQL
+-- 先查
+SELECT ID, TIME, INFO
+FROM information_schema.processlist
+WHERE TIME > 60;
+
+-- 再 kill
+KILL 12345;
+
+
+
+```
+
 
 # 8. mysql相关链接
 
@@ -1131,6 +1478,7 @@ WHERE password_lifetime IS NOT NULL;
 
 ### 9.9.2. 2. 自动化过期处理
 
+
 # 10. 隔离级别
 
 ## 10.1. 隔离级别 & 事务可见性
@@ -1411,4 +1759,182 @@ SELECT * FROM seq WHERE id = 5000;   -- id 不存在
 ② 可通过 `SHOW ENGINE INNODB STATUS\G` 检查当前锁等待情况。  
 ③ 生产环境建议在 `REPEATABLE READ` 下，必要时仅开启 `READ COMMITTED` 或 `SERIALIZABLE`。
 
-祝你编码🚀，并发顺畅🌐！
+# 11. 集群
+
+## 主从复制
+
+```mermaid
+graph TB
+    subgraph "应用"
+        C[web]
+    end
+    subgraph "负载均衡/代理层"
+        P[ProxySql/HAProxy]
+    end
+    subgraph "Mysql"
+        S1[Slave1]
+        M[master]
+        S2[Slave2]
+    end
+    
+    C-->P
+    P-->M
+    M-.数据同步.->S1
+    M-.数据同步.->S2
+
+```
+
+### 服务器规划
+
+```bash
+
+# 三台服务器（最小配置）
+Master:  192.168.1.10
+Slave1:  192.168.1.11  
+Slave2:  192.168.1.12
+Proxy:   192.168.1.13  # 可选，可用其中一台Slave兼任
+
+```
+
+### Mysql安装
+
+```bash
+
+# Ubuntu/Debian
+sudo apt update
+sudo apt install mysql-server -y
+
+# CentOS/RHEL
+sudo yum install mysql-server -y
+
+# 启动服务
+sudo systemctl start mysql
+sudo systemctl enable mysql
+
+```
+
+### 配置
+
+```ini
+# 编辑配置文件 `/etc/mysql/mysql.conf.d/mysqld.cnf` 或 `/etc/my.cnf`：
+[mysqld]
+# 基础配置
+server-id = 1
+log_bin = /var/log/mysql/mysql-bin.log
+binlog_format = ROW
+expire_logs_days = 7
+max_binlog_size = 100M
+
+# 复制相关
+binlog_do_db = your_database_name  # 可选：指定要复制的数据库
+# binlog_ignore_db = mysql          # 可选：忽略系统库
+
+# 性能优化
+innodb_flush_log_at_trx_commit = 1
+sync_binlog = 1
+
+# 连接设置
+bind-address = 0.0.0.0
+
+```
+
+**重启MySQL并创建复制用户**：
+
+**新旧语法对照表**
+
+| 旧语法 (8.0.22前)       | 新语法 (8.0.22+)                  |
+| ------------------- | ------------------------------ |
+| `STOP SLAVE`        | `STOP REPLICA`                 |
+| `CHANGE MASTER TO`  | `CHANGE REPLICATION SOURCE TO` |
+| `MASTER_HOST`       | `SOURCE_HOST`                  |
+| `SHOW SLAVE STATUS` | `SHOW REPLICA STATUS`          |
+|                     |                                |
+
+```mysql
+
+-- 登录MySQL
+mysql -u root -p
+
+-- 创建复制用户
+CREATE USER 'repl'@'%' IDENTIFIED BY 'Repl123!@#';
+GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
+FLUSH PRIVILEGES;
+
+-- 查看主服务器状态
+SHOW MASTER STATUS;
+-- 
+show binary log status;
+-- 记下 `File` 和 `Position` 的值，例如：
++------------------+----------+--------------+------------------+
+| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB |
++------------------+----------+--------------+------------------+
+| mysql-bin.000001 |      154 |              |                  |
++------------------+----------+--------------+------------------+
+```
+
+**从配置服务器**
+
+```ini
+
+# 推荐使用uuidgen 进行构造
+[mysqld]
+server-id = 2  # 每台从服务器ID必须唯一
+relay_log = /var/log/mysql/mysql-relay-bin.log
+log_bin = /var/log/mysql/mysql-bin.log
+# 只读设置（关键！）
+read_only = 1  # 从库只读，root用户任然可读写操作
+super_read_only = ON  # 防止SUPER用户写入
+# 复制优化
+slave_parallel_workers = 4
+slave_parallel_type = LOGICAL_CLOCK
+
+```
+
+**只读模式验证**
+
+```sql
+
+-- 检查只读状态
+
+mysql> SHOW VARIABLES LIKE '%read_only%';
++-----------------------+-------+
+| Variable_name         | Value |
++-----------------------+-------+
+| innodb_read_only      | OFF   |
+| read_only             | OFF   |
+| super_read_only       | OFF   |
+| transaction_read_only | OFF   |
++-----------------------+-------+
+4 rows in set (0.00 sec)
+
+
+```
+
+
+
+**配置复制**
+
+```mysql
+
+    -- 停止复制
+STOP SLAVE;
+stop replica;
+-- 配置主库连接
+CHANGE MASTER TO \
+    MASTER_HOST = '192.168.117.130', \
+    MASTER_USER = 'repl', \
+    MASTER_PASSWORD = 'Repl123!@#', \
+    MASTER_LOG_FILE = 'mysql-bin.000005', \
+    MASTER_LOG_POS = 158,\
+    MASTER_CONNECT_RETRY = 60;
+
+-- 启动复制
+START SLAVE;
+start replica;
+
+-- 查看复制状态
+SHOW SLAVE STATUS\G
+-- 检查 `Slave_IO_Running` 和 `Slave_SQL_Running` 是否为 `Yes`。
+-- slave重复上面的步骤
+    
+```

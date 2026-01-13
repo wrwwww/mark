@@ -241,6 +241,52 @@ Redis中的发布/订阅（Pub/Sub）机制是一种消息广播模式，而不�
 
 在Redis的发布/订阅模式下，每个消息都会被发送到所有订阅该频道的订阅者。消息不会被存储或持久化，因此，每个消息只能被消费一次，但可以同时被多个订阅者消费。如果需要消息持久化和确认机制，可以考虑使用其他消息队列系统，如Redis Streams、Kafka或RabbitMQ等。
 
+### 序列化配置
+
+JDK默认序列化存在序列化结果过大，序列化包含额外信息，存在多个高危的反序列化漏洞。
+使用 **json** redis的数据的序列化
+
+```java
+
+@Configuration
+public class RedisSerializationConfig {
+    
+    // ❌ 不推荐：使用JDK序列化
+    @Bean
+    public RedisTemplate<String, Object> jdkSerializationRedisTemplate() {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory());
+        
+        // 默认使用JDK序列化
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new JdkSerializationRedisSerializer());  // 问题所在！
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(new JdkSerializationRedisSerializer());
+        
+        return template;
+    }
+    
+    // ✅ 推荐：使用JSON序列化
+    @Bean
+    public RedisTemplate<String, Object> jsonSerializationRedisTemplate() {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory());
+        
+        // 使用JSON序列化
+        Jackson2JsonRedisSerializer<Object> serializer = 
+            new Jackson2JsonRedisSerializer<>(Object.class);
+        
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(serializer);
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(serializer);
+        
+        return template;
+    }
+    
+```
+
+
 ## Redis集群
 
 Redis集群主要有三种部署方式：**主从复制**、**哨兵模式** 和 **Cluster集群模式**。
@@ -412,7 +458,8 @@ graph TB
         S[Slave 6380]
         S2N[Slave 6381]
     end
-    A-->S1
+    
+    A-->S2
     S1-.监控.->M
     S2-.监控.->M
     S3-.监控.->M
