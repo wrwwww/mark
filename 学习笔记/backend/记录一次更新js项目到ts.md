@@ -26,13 +26,13 @@
 
 ## 2. TypeScript 环境搭建及配置
 
-### 2.1 安装依赖
+### 安装依赖
 
 ```
 pnpm add -D typescript @types/node
 ```
 
-### 2.2 初始化与配置 `tsconfig.json`
+### 初始化与配置 `tsconfig.json`
 
 初始执行：
 
@@ -65,7 +65,7 @@ pnpm exec tsc --init
 
 **说明**：`module` 和 `moduleResolution` 设为 `nodenext` 是解决 TS 无法正确解析 `.ts` 文件及路径别名的关键。
 
-### 2.3 修改文件后缀和语法
+### 修改文件后缀和语法
 
 - `.js` 改成 `.ts`
 - Vue 文件 `<script lang="ts">`
@@ -75,13 +75,13 @@ pnpm exec tsc --init
 
 ## 3. ESLint + Prettier 集成配置
 
-### 3.1 安装相关依赖
+### 安装相关依赖
 
 ```
 pnpm add -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-vue eslint-config-prettier eslint-plugin-prettier prettier
 ```
 
-### 3.2 配置示例 `.eslintrc.js`
+### 配置示例 `.eslintrc.js`
 
 ```
 module.exports = {
@@ -109,7 +109,7 @@ module.exports = {
 }
 ```
 
-### 3.3 Prettier 配置文件 `.prettierrc`
+### Prettier 配置文件 `.prettierrc`
 
 ```
 {
@@ -121,7 +121,7 @@ module.exports = {
 }
 ```
 
-### 3.4 解决格式化冲突
+### 解决格式化冲突
 
 - 使用 `eslint-config-prettier` 关闭 ESLint 中与 Prettier 冲突的规则。
 - 保证 `.eslintrc.js` 中有 `"plugin:prettier/recommended"` 或手动添加 prettier 相关规则。
@@ -130,7 +130,7 @@ module.exports = {
 
 ## 4. Husky + lint-staged 实现提交前格式化
 
-### 4.1 安装并初始化 Husky 和 lint-staged
+### 安装并初始化 Husky 和 lint-staged
 
 ```
 pnpm add -D husky lint-staged
@@ -140,7 +140,7 @@ pnpm dlx husky-init && pnpm install
 
 - 会自动生成 `.husky/pre-commit` 和 `prepare` 脚本。
 
-### 4.2 配置 `package.json` 中 lint-staged
+### 配置 `package.json` 中 lint-staged
 
 ```
 "lint-staged": {
@@ -152,7 +152,7 @@ pnpm dlx husky-init && pnpm install
 }
 ```
 
-### 4.3 `.husky/pre-commit` 内容示例
+### `.husky/pre-commit` 内容示例
 
 ```
 #!/bin/sh
@@ -161,7 +161,7 @@ pnpm dlx husky-init && pnpm install
 pnpm exec lint-staged
 ```
 
-### 4.4 常见问题
+### 常见问题
 
 - 报错 `Command "lint-staged" not found`，确认 `lint-staged` 是否安装，且 `.husky/pre-commit` 中执行命令是否正确。
 - 执行 `pnpm dlx husky-init` 重置 husky。
@@ -170,7 +170,7 @@ pnpm exec lint-staged
 
 ## 5. Vite 配置注意点
 
-### 5.1 示例 `vite.config.ts`
+### 示例 `vite.config.ts`
 
 ```
 import { defineConfig } from "vite"
@@ -206,7 +206,7 @@ export default defineConfig({
 })
 ```
 
-### 5.2 注意事项
+### 注意事项
 
 - Vite 配置应为同步函数导出，避免 async 导致类型错误。
 - 路径别名和 TS 配置中的路径要对应。

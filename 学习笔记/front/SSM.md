@@ -4,7 +4,7 @@
 
 ### 1. mybatis
 
-#### 1.0 mybatis的了解,及用idea创建项目
+#### mybatis的了解,及用idea创建项目
 
 - MyBatis 是一款优秀的**持久层框架**
 - MyBatis 避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集的过程
@@ -14,7 +14,7 @@
 - Mybatis官方文档 : http://www.mybatis.org/mybatis-3/zh/index.html
 - GitHub : https://github.com/mybatis/mybatis-3
 
-#### 1.1 引入mybatis的maven包,以及相关依赖包
+#### 引入mybatis的maven包,以及相关依赖包
 
 分别是mysql的驱动,junit包可以用来测试代码,以及mybatis的包
 
@@ -37,13 +37,13 @@
       </dependency>
 ```
 
-#### 1.2 idea连接数据库
+#### idea连接数据库
 
 ![](学习笔记/Attachments/1656129189878-aca39b2a-7c12-40d0-b5c5-be600817ceb4.png "输入数据库用户名和密码")
 
 ![](学习笔记/Attachments/1656129116213-bfa75dcb-94e9-4933-84ef-c77b2beec86d.png "连接后")
 
-#### 1.3 创建项目的基本结构
+#### 创建项目的基本结构
 
 实体类包 pojo
 
@@ -53,7 +53,7 @@
 
 ![](学习笔记/Attachments/1656129558753-e9f61e43-3e3f-4035-baf5-df30a394b3a7.png "mybatis项目基本结构")
 
-#### 1.4 创建实体类(pojo)
+#### 创建实体类(pojo)
 
 根据需要的表创建实体类
 
@@ -84,7 +84,7 @@ public class Teacher {
 
 其中实体类的字段需要对应表中得字段
 
-#### 1.5 创建持久层接口
+#### 创建持久层接口
 
 ```
 package com.manager.dao;
@@ -103,7 +103,7 @@ public interface TeacherMapper {
 }
 ```
 
-#### 1.6 在rescources中创建xml映射文件
+#### 在rescources中创建xml映射文件
 
 ![](学习笔记/Attachments/1656130244789-93e414dc-89c6-4a39-bc4e-25700569449a.png "目录")
 
@@ -175,7 +175,7 @@ public interface TeacherMapper {
 
 至此,我们已近实现了持久层对数据库的操作
 
-#### 1.7 创建数据库的配置文件
+#### 创建数据库的配置文件
 
 其中包含数据库的用户名,密码数据库的地址,以及使用的驱动,为编写mybatis做准备
 
@@ -186,7 +186,7 @@ url=jdbc:mysql://localhost:3306/mybatis_study?useSSL=true&useUnicode=true&charac
 driver=com.mysql.jdbc.Driver
 ```
 
-#### 1.8 编写mybatis的配置
+#### 编写mybatis的配置
 
 ```
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -236,7 +236,7 @@ driver=com.mysql.jdbc.Driver
 </configuration>
 ```
 
-#### 1.9 编写工具类
+#### 编写工具类
 
 ```
 package com.manager.utils;
@@ -266,7 +266,7 @@ public class MyBatisUtils {
 }
 ```
 
-#### 1.10 最后编写测试类测试
+#### 最后编写测试类测试
 
 ```
  @Test
@@ -2307,33 +2307,33 @@ public String hello(@RequestParam("username") String name, Model model){
 
 ## SSM的整合
 
-### 1.1 创建空的maven项目
+### 创建空的maven项目
 
-### 1.2 添加web框架
+### 添加web框架
 
-### 1.3 添加maven依赖
+### 添加maven依赖
 
-### 1.4 idea连接数据库
+### idea连接数据库
 
-### 1.5 编写实体类
+### 编写实体类
 
-### 1.6 编写dao接口
+### 编写dao接口
 
-### 1.7 实现dao接口
+### 实现dao接口
 
-### 1.8 编写service层接口
+### 编写service层接口
 
-### 1.9 实现service层接口
+### 实现service层接口
 
-### 1.10 SSM整合的配置
+### SSM整合的配置
 
-### 1.11 servlet添加,过滤器的添加
+### servlet添加,过滤器的添加
 
-### 1.12 jsp网页设计
+### jsp网页设计
 
-### 1.13 controller层的编写
+### controller层的编写
 
-### 1.14 tomcat部署运行
+### tomcat部署运行
 
 ### 使用json在前后端之间传递消息
 
@@ -2478,9 +2478,9 @@ ImageIO.write(image, "JPEG", response.getOutputStream());
 
 ### 1. vueAdmin后台管理
 
-#### 1.1 创建项目
+#### 创建项目
 
-#### 1.2 导入依赖
+#### 导入依赖
 
 ##### 1.2.1开发依赖
 
@@ -2513,7 +2513,7 @@ ImageIO.write(image, "JPEG", response.getOutputStream());
         </dependency>
 ```
 
-##### 1.2.2 整合数据库
+##### 整合数据库
 
 ```
 
@@ -2542,7 +2542,7 @@ ImageIO.write(image, "JPEG", response.getOutputStream());
 
   
 
-### 1.3 web容器
+### web容器
 
 先排除tomcat,然后添加新的web容器
 
@@ -2569,7 +2569,7 @@ ImageIO.write(image, "JPEG", response.getOutputStream());
 
 当有相关依赖的时候就会自动创建相关的bean
 
-### 1.4 登录流程
+### 登录流程
 
 #### 1.4.1验证码的生成
 
@@ -2693,7 +2693,7 @@ public class CaptchaController
 }
 ```
 
-#### 1.4.2 验证用户信息
+#### 验证用户信息
 
 ```
 @RestController
@@ -2964,9 +2964,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter
     }
 ```
 
-### 1.5 获取用户信息
+### 获取用户信息
 
-#### 1.5.1 拿到用户信息
+#### 拿到用户信息
 
 ```
     /**
@@ -3002,7 +3002,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter
     }
 ```
 
-#### 1.5.2 拿到用户路由
+#### 拿到用户路由
 
 ```
 
@@ -3088,7 +3088,7 @@ order by m.parent_id, m.order_num
 </dependency>
 ```
 
-#### 1.1 架构
+#### 架构
 
 springSecurity的过滤器链
 
@@ -3138,7 +3138,7 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 - [AuthorizationFilter](https://docs.spring.io/spring-security/reference/servlet/authorization/authorize-http-requests.html)
 - SwitchUserFilter
 
-#### 1.2 认证
+#### 认证
 
 **认证:验证当前访问系统的是不是本系统的用户，并且要确认具体是哪个用户**
 

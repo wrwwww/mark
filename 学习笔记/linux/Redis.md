@@ -240,3 +240,320 @@ Redis中的发布/订阅（Pub/Sub）机制是一种消息广播模式，而不�
 #### 总结
 
 在Redis的发布/订阅模式下，每个消息都会被发送到所有订阅该频道的订阅者。消息不会被存储或持久化，因此，每个消息只能被消费一次，但可以同时被多个订阅者消费。如果需要消息持久化和确认机制，可以考虑使用其他消息队列系统，如Redis Streams、Kafka或RabbitMQ等。
+
+### 序列化配置
+
+JDK默认序列化存在序列化结果过大，序列化包含额外信息，存在多个高危的反序列化漏洞。
+使用 **json** redis的数据的序列化
+
+```java
+
+@Configuration
+public class RedisSerializationConfig {
+    
+    // ❌ 不推荐：使用JDK序列化
+    @Bean
+    public RedisTemplate<String, Object> jdkSerializationRedisTemplate() {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory());
+        
+        // 默认使用JDK序列化
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new JdkSerializationRedisSerializer());  // 问题所在！
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(new JdkSerializationRedisSerializer());
+        
+        return template;
+    }
+    
+    // ✅ 推荐：使用JSON序列化
+    @Bean
+    public RedisTemplate<String, Object> jsonSerializationRedisTemplate() {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory());
+        
+        // 使用JSON序列化
+        Jackson2JsonRedisSerializer<Object> serializer = 
+            new Jackson2JsonRedisSerializer<>(Object.class);
+        
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(serializer);
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(serializer);
+        
+        return template;
+    }
+    
+```
+
+
+## Redis集群
+
+Redis集群主要有三种部署方式：**主从复制**、**哨兵模式** 和 **Cluster集群模式**。
+
+###  Redis Cluster集群
+
+```mermaid
+graph TB
+    subgraph "集群节点（16384个slot）"
+        M1[Master 7001<br/>Slots 0-5460]
+        M2[Master 7002<br/>Slots 5461-10922]
+        M3[Master 7003<br/>Slots 10923-16383]
+    end
+    
+    subgraph "从节点（复制+故障转移）"
+        S1[Slave 7004]
+        S2[Slave 7005]
+        S3[Slave 7006]
+    end
+    
+    M1 -- 复制 --> S1
+    M2 -- 复制 --> S2
+    M3 -- 复制 --> S3
+    
+    style M1 fill:#e1f5e1
+    style M2 fill:#e1f5e1
+    style M3 fill:#e1f5e1
+    style S1 fill:#f5f5f5
+    style S2 fill:#f5f5f5
+    style S3 fill:#f5f5f5
+```
+
+**特点**：
+
+- **数据分片**：16384个slot分配到多个主节点
+- **自动故障转移**：主节点宕机，从节点自动升级为主节点
+- **高可用**：每个主节点都有从节点
+- **客户端重定向**：客户端连接到错误的节点时，会收到重定向指令
+
+    > 搭建
+
+1. 安装redis
+
+```bash
+
+# Ubuntu/Debian
+sudo apt update
+sudo apt install redis-server -y
+
+# CentOS/RHEL
+sudo yum install epel-release
+sudo yum install redis -y
+
+# 或编译安装
+wget https://download.redis.io/redis-stable.tar.gz
+tar -xzvf redis-stable.tar.gz
+cd redis-stable
+make && sudo make install
+
+```
+
+2. 准备节点配置
+
+```bash
+
+# 创建集群目录
+mkdir -p /opt/redis-cluster/{7001,7002,7003,7004,7005,7006}
+
+# 复制配置文件到每个节点
+for port in {7001..7006}; do
+  cp redis.conf /opt/redis-cluster/${port}/
+done
+
+```
+
+3. 配置每个节点
+
+```bash
+# 修改端口号创建其他节点的配置。
+
+# 基础配置
+port 7001
+bind 0.0.0.0
+daemonize yes
+pidfile /var/run/redis_7001.pid
+logfile "/opt/redis-cluster/7001/redis.log"
+dir /opt/redis-cluster/7001/
+
+# 集群配置
+cluster-enabled yes
+cluster-config-file nodes-7001.conf
+cluster-node-timeout 5000
+cluster-require-full-coverage no
+
+# 持久化（可选）
+appendonly yes
+appendfilename "appendonly-7001.aof"
+
+```
+
+4. 启动所有节点
+
+```bash
+
+# 启动所有Redis实例
+redis-server /opt/redis-cluster/7001/redis.conf
+redis-server /opt/redis-cluster/7002/redis.conf
+redis-server /opt/redis-cluster/7003/redis.conf
+redis-server /opt/redis-cluster/7004/redis.conf
+redis-server /opt/redis-cluster/7005/redis.conf
+redis-server /opt/redis-cluster/7006/redis.conf
+
+# 检查进程
+ps aux | grep redis
+
+```
+
+5. 创建集群
+
+```bash
+
+# 使用redis-cli创建集群
+# --cluster-replicas 1 表示每个主节点有1个从节点
+redis-cli --cluster create \
+  127.0.0.1:7001 \
+  127.0.0.1:7002 \
+  127.0.0.1:7003 \
+  127.0.0.1:7004 \
+  127.0.0.1:7005 \
+  127.0.0.1:7006 \
+  --cluster-replicas 1
+
+# 输入yes确认配置
+
+```
+
+6. 验证集群
+
+```bash
+
+# 查看集群信息
+redis-cli -p 7001 cluster nodes
+redis-cli -p 7001 cluster info
+
+# 测试集群
+redis-cli -c -p 7001
+> set key1 value1
+> get key1
+
+# 检查key的slot分布
+redis-cli -p 7001 cluster keyslot key1
+
+```
+
+###  哨兵模式（Sentinel）
+
+```mermaid
+graph TB
+    subgraph "客户端访问层"
+        A[客户端]
+    end  
+    subgraph "哨兵层 (监控+选举)"
+       S1[Sentinel 26379]
+       S2[Sentinel 26379]
+       S3[Sentinel 26379]
+    end
+    subgraph "数据层"
+        M[Master 6379]
+        S[Slave 6380]
+        S2N[Slave 6381]
+    end
+    
+    A-->S2
+    S1-.监控.->M
+    S2-.监控.->M
+    S3-.监控.->M
+    M-.复制.->S
+    M-.复制.->S2N
+    
+```
+
+**特点**：
+
+- **自动故障转移**：主节点宕机，哨兵自动选举新主节点
+- **客户端发现**：客户端从哨兵获取当前的主节点地址
+- **最少3个哨兵节点**（避免脑裂）
+- **写操作**：只到当前主节点
+
+### 主从复制（master-slave）
+
+```mermaid
+graph LR
+    C[客户端]
+    M[Master 6379]
+    S1[Slave1 6380异步复制]
+    S2[Slave2 6380异步复制]
+    
+    C --> M
+    M --> S1
+    M --> S2
+    
+    style M fill:#e1f5e1
+    style S1 fill:#f5f5f5
+    style S2 fill:#f5f5f5
+
+```
+
+**特点**：
+
+- **写操作**：只到主节点
+- **读操作**：可到主节点或从节点
+- **故障转移**：**不支持自动故障转移**，主节点宕机需要手动切换
+- **数据一致性**：异步复制，可能有数据延迟
+
+### TCE Proxy Redis Cluster架构
+
+```mermaid
+graph TB
+    subgraph "Clent"
+        C1[Client 1]
+        C2[Client 2]
+    end
+
+    subgraph "Proxy"
+        P1[Proxy 1]
+        P2[Proxy 2]
+        P3[Proxy 3]
+    end
+ 
+    subgraph "集群节点（16384个slot）"
+        M1[Master]
+        M2[Master]
+        M3[Master]
+    end
+    
+    subgraph "从节点（复制+故障转移）"
+        S1[Slave]
+        S2[Slave]
+        S3[Slave]
+    end
+    
+    Clent -. 统一接入点（虚拟IP）.-> Proxy
+    
+    
+    
+    Proxy -.智能路由<br/>请求分发.-> SPLIT(( ))
+    SPLIT --> M1
+    SPLIT --> M2
+    SPLIT --> M3
+    
+    
+    M1 -- 复制 --> S1
+    M2 -- 复制 --> S2
+    M3 -- 复制 --> S3
+    
+    style M1 fill:#e1f5e1
+    style M2 fill:#e1f5e1
+    style M3 fill:#e1f5e1
+    style S1 fill:#f5f5f5
+    style S2 fill:#f5f5f5
+    style S3 fill:#f5f5f5
+    
+  
+
+```
+
+- **客户端透明**：业务像使用单节点Redis一样使用
+- **自动分片**：基于CRC16算法，默认16384个slot
+- **智能路由**：Proxy自动将请求路由到正确分片
+- **弹性伸缩**：支持在线增删分片，数据自动迁移

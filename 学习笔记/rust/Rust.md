@@ -396,7 +396,7 @@ atoi = "2.0.0"
 ### serde
 ## 14.2 变体属性
 
-### 4.2.1 `#[serde(rename = "name")]`
+### `#[serde(rename = "name")]`
 
 如上
 
@@ -411,7 +411,7 @@ atoi = "2.0.0"
 - `#[serde(rename(serialize = "ser_name", deserialize = "de_name"))]`
     
 
-### 4.2.2 `#[serde(alias = "name")]`
+### `#[serde(alias = "name")]`
 
 `#[serde(alias = "name")]` 是一个属性，用于在序列化和反序列化时指定字段的别名。它可以用于将 Rust 结构体字段与 JSON 键或其他数据格式中的不同名称进行映射。
 
@@ -419,7 +419,7 @@ atoi = "2.0.0"
 
 在上面的示例中，我们定义了一个 `Person` 结构体，其中包含 `full_name` 和 `age` 字段。在 `full_name` 字段上，我们使用 `#[serde(alias = "name")]` 属性指定了一个别名为 "name"。这意味着在序列化和反序列化时，我们可以使用 "name" 作为键来表示 `full_name` 字段。
 
-### 4.2.3 `#[serde(rename_all = "...")]`
+### `#[serde(rename_all = "...")]`
 
 根据给定的大小写约定重命名此结构体变体的所有字段。可能的值为`"lowercase"`, `"UPPERCASE"`, `"PascalCase"`, `"camelCase"`, `"snake_case"`, `"SCREAMING_SNAKE_CASE"`, `"kebab-case"`, `"SCREAMING-KEBAB-CASE"`。
 
@@ -432,7 +432,7 @@ atoi = "2.0.0"
 - `#[serde(rename_all(serialize = "...", deserialize = "..."))]`
     
 
-### 4.2.4 `#[serde(skip)]`
+### `#[serde(skip)]`
 
 切勿序列化或反序列化此变体。
 
@@ -448,7 +448,7 @@ atoi = "2.0.0"
 
 通过使用 `#[serde(skip)]` 属性，您可以选择性地排除某些字段，以便在序列化和反序列化过程中忽略它们。这对于保护敏感信息或排除不必要的字段很有用。
 
-### 4.2.5 `#[serde(skip_serializing)]`
+### `#[serde(skip_serializing)]`
 
 `#[serde(skip_serializing)]` 是一个属性，用于在序列化时跳过特定的字段。通过使用 `#[serde(skip_serializing)]` 属性，您可以指示 Serde 库在处理序列化时忽略该字段，但在反序列化时仍会使用该字段。
 
@@ -464,7 +464,7 @@ atoi = "2.0.0"
 
 通过使用 `#[serde(skip_serializing)]` 属性，您可以选择性地在序列化过程中排除某些字段，但仍然保留它们在反序列化过程中的使用。这对于在序列化时隐藏某些字段的值，但在反序列化时仍然需要使用它们很有用。
 
-### 4.2.6 `#[serde(skip_deserializing)]`
+### `#[serde(skip_deserializing)]`
 
 `#[serde(skip_deserializing)]` 是一个属性，用于在反序列化时跳过特定的字段。通过使用 `#[serde(skip_deserializing)]` 属性，您可以指示 Serde 库在处理反序列化时忽略该字段，但在序列化时仍会使用该字段。
 
@@ -480,7 +480,7 @@ atoi = "2.0.0"
 
 通过使用 `#[serde(skip_deserializing)]` 属性，您可以选择性地在反序列化过程中排除某些字段，但仍然保留它们在序列化过程中的使用。这对于在反序列化时忽略某些字段的值，但在序列化时仍然需要使用它们很有用。
 
-### 4.2.7 `#[serde(serialize_with = "path")]`
+### `#[serde(serialize_with = "path")]`
 
 - `#[serde(serialize_with = "path")]` 是一个属性，用于指定在序列化过程中使用自定义的序列化函数。通过使用 `#[serde(serialize_with = "path")]` 属性，您可以告诉 Serde 库在序列化时使用指定的函数来处理特定字段。
     
