@@ -671,45 +671,10 @@ desc(describe) 表名;
 
 表结构的修改
 
-```
--- 重命名表(数据库不重命名)
-alter table `旧名字` rename `新名字`;
--- 字段类型的修改
-alter table `表名` modify `字段名` 字段类型(int(10));
--- 字段名的修改(change) 
-alter table  `表名` change  `字段名` `新名字` 字段类型(int(10));
 
--- 添加字段
-alter table `表名` add `字段名` `字段类型` [first/last/after `字段名`];
--- 添加主键约束
-alter table `表名` add primary key(字段);
-```
 
-`rename`: 可以用来修改表的名称
 
-`**change**`:关键字可以修改表的字段的名称,能修改表的类型
 
-`**modify**`:关键字可以修改表的字段类型,但不能修改字段的名称
-
-表数据的增删查改
-
-```
--- 插入语句
-insert into `表名` values ("","",0),("","",0);
-insert into `表名`(字段,字段,字段) values ("","",0),("","",0);
-
--- 查询语句
-select * from `表名` where 条件表达式 group by 字段 having 条件表达式 order by 字段 [asc/desc];
--- 查询全部信息并去重
-select distinct * from `表名`;
-
--- 更新语句
-update `表名` set 字段=数值 where 条件表达式;
-
--- 删除语句
-delete from `表名` where 条件表达式; -- delete 使用后自增索引可能会出问题
-truncate table `表名`;  -- 删除表重新创建,清空全部数据
-```
 
 ### 7.3.3. 基本语句的实战
 
@@ -873,9 +838,7 @@ update student_gb set sage=sage+1;
 
 ### 7.4.1. 概述
 
-数据控制语言：Data Control Language。用来授权或回收访问数据库的某种特权，并控制数据库操纵事务发生的时间及效果，能够对数据库进行监视。
 
-比如常见的授权、取消授权、回滚、提交等等操作。
 
 ## 7.5. 相关链接
 
@@ -1483,12 +1446,12 @@ WHERE password_lifetime IS NOT NULL;
 
 ## 10.1. 隔离级别 & 事务可见性
 
-|隔离级别|主要特性|可能读现象|典型查询示例|
-|---|---|---|---|
-|`READ UNCOMMITTED`|最低隔离，**不做任何加锁**|_脏读_、_不可重复读_、_幻读_|`SELECT …`|
-|`READ COMMITTED`|每条语句只看已提交的事务|_不可重复读_、_幻读_|`SELECT …` (单条语句)|
-|`REPEATABLE READ`|默认级别，使用 **MVCC + next‑key lock** 防止幻读|_不发生幻读_|`SELECT … FOR UPDATE` / `SELECT …` (WITH SNAPSHOT)|
-|`SERIALIZABLE`|最高级别，使用 **行锁 + gap lock** 等保证完全串行|无幻读、无脏读|`SELECT … LOCK IN SHARE MODE` / `SELECT … FOR UPDATE`|
+| 隔离级别               | 主要特性                                  | 可能读现象             | 典型查询示例                                                |
+| ------------------ | ------------------------------------- | ----------------- | ----------------------------------------------------- |
+| `READ UNCOMMITTED` | 最低隔离，**不做任何加锁**                       | _脏读_、_不可重复读_、_幻读_ | `SELECT …`                                            |
+| `READ COMMITTED`   | 每条语句只看已提交的事务                          | _不可重复读_、_幻读_      | `SELECT …` (单条语句)                                     |
+| `REPEATABLE READ`  | 默认级别，使用 **MVCC + next‑key lock** 防止幻读 | _不发生幻读_           | `SELECT … FOR UPDATE` / `SELECT …` (WITH SNAPSHOT)    |
+| `SERIALIZABLE`     | 最高级别，使用 **行锁 + gap lock** 等保证完全串行     | 无幻读、无脏读           | `SELECT … LOCK IN SHARE MODE` / `SELECT … FOR UPDATE` |
 
 **MVCC**（多版本并发控制）保持历史版本，读不加锁；写会加行锁。  
 幻读是 _新行被插入导致相同范围查询返回更多行_ 的现象。
@@ -1536,10 +1499,10 @@ WHERE password_lifetime IS NOT NULL;
 
 ### 10.2.3. 幻读 (Phantom Read)
 
-|事务 A|事务 B|
-|---|---|
-|`START TRANSACTION;`  <br>`SELECT COUNT(*) FROM t WHERE age > 30;`  <br>(假设为 5)|`START TRANSACTION;`  <br>`INSERT INTO t (id, age, val) VALUES (100, 35, 'new');`  <br>`COMMIT;`|
-|再次 `SELECT COUNT(*) FROM t WHERE age > 30;`  <br>结果变为 6 —— 除了现有行，“**幻**”出现了新行。||
+| 事务 A                                                                            | 事务 B                                                                                             |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `START TRANSACTION;`  <br>`SELECT COUNT(*) FROM t WHERE age > 30;`  <br>(假设为 5) | `START TRANSACTION;`  <br>`INSERT INTO t (id, age, val) VALUES (100, 35, 'new');`  <br>`COMMIT;` |
+| 再次 `SELECT COUNT(*) FROM t WHERE age > 30;`  <br>结果变为 6 —— 除了现有行，“**幻**”出现了新行。  |                                                                                                  |
 
 **隔离级别**  
 ① `READ UNCOMMITTED`、`READ COMMITTED`、`REPEATABLE READ` 都可能触发幻读。  
@@ -1640,15 +1603,15 @@ COMMIT;
 
 ## 10.3. InnoDB 锁的种类
 
-|锁类型|触发语句|保护范围|作用|典型场景|
-|---|---|---|---|---|
-|**共享锁 (S)**|`SELECT … LOCK IN SHARE MODE`|行|允许读，但不允许写|读并发|
-|**排他锁 (X)**|`SELECT … FOR UPDATE`|行|阻止其他事务读写|更新前锁行|
-|**记录锁 (Record Lock)**|写、行锁|行|只锁住记录|插入、更新|
-|**Gap Lock**|等值查询（`=`）或排序|索引键值 _gap_|防止幻读|`SELECT … WHERE id = 5` (id 不存在)|
-|**Next‑Key Lock**|**Gap Lock + Record Lock**|键区间起止点|防止插入冲突 & 幻读|任何范围查询|
-|**Auto‑inc Lock**|插入自增主键|自增列|防止自增冲突|`INSERT … AUTO_INCREMENT`|
-|**Table‑level Lock**|`LOCK TABLES …`|表|适用于DDL或极端并发|`CREATE TABLE`|
+| 锁类型                   | 触发语句                          | 保护范围       | 作用          | 典型场景                             |
+| --------------------- | ----------------------------- | ---------- | ----------- | -------------------------------- |
+| **共享锁 (S)**           | `SELECT … LOCK IN SHARE MODE` | 行          | 允许读，但不允许写   | 读并发                              |
+| **排他锁 (X)**           | `SELECT … FOR UPDATE`         | 行          | 阻止其他事务读写    | 更新前锁行                            |
+| **记录锁 (Record Lock)** | 写、行锁                          | 行          | 只锁住记录       | 插入、更新                            |
+| **Gap Lock**          | 等值查询（`=`）或排序                  | 索引键值 _gap_ | 防止幻读        | `SELECT … WHERE id = 5` (id 不存在) |
+| **Next‑Key Lock**     | **Gap Lock + Record Lock**    | 键区间起止点     | 防止插入冲突 & 幻读 | 任何范围查询                           |
+| **Auto‑inc Lock**     | 插入自增主键                        | 自增列        | 防止自增冲突      | `INSERT … AUTO_INCREMENT`        |
+| **Table‑level Lock**  | `LOCK TABLES …`               | 表          | 适用于DDL或极端并发 | `CREATE TABLE`                   |
 
 **Gap Lock + Record Lock** 组合得到 _Next‑Key Lock_，是 InnoDB 防止幻读的核心手段。
 
