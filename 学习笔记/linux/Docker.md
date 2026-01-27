@@ -100,7 +100,7 @@ systemctl enable docker.service
 
 ## 卸载
 
-```
+```shell
 #!/bin/bash
 
 echo 关闭docker中运行的容器
