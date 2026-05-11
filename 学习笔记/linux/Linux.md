@@ -1,4 +1,61 @@
-# 1. 认识Linux
+# 第1章  Linux快速入门
+
+### 32位与64位操作系统的区别
+
+学习Linux操作系统之前，需要理解计算机基本的常识，计算机内部对数据的传输和储存都是使用二进制，二进制是计算技术中广泛采用的一种[数制](http://baike.baidu.com/item/%E6%95%B0%E5%88%B6)，而Bit（比特）则表示二进制位，[二进制数](http://baike.baidu.com/item/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0)是用0和1两个[数码](http://baike.baidu.com/item/%E6%95%B0%E7%A0%81)来表示的数。基数为2，进位规则是“逢二进一”，0或者1分别表示一个Bit二进制位。
+
+Bit位是计算机最小单位，而字节是计算机中数据处理的基本单位，转换单位为：1Byte=8Bit，4Byte=32Bit。
+
+随着计算机技术的发展，尤其是中央处理器（Central Processing Unit，CPU）技术的变革，CPU的位数指的是通用寄存器（General-Purpose Registers， GPRs）的数据宽度，也就是处理器一次可以处理的数据量多少。
+
+目前主流CPU处理器分为32位CPU处理器和64位CPU处理器，32位CPU处理器可以一次性处理4个字节的数据量。而64位处理器一次性处理8个字节的数据量（1Byte=8bit），64位CPU处理器对计算机处理器在RAM里（随机存取储存器）处理信息的效率比32位CPU做了很多优化，效率更高。
+
+X86_32位操作系统和X86_64操作系统也是基于CPU位数的支持，具体区别如下：
+
+32位操作系统表示32位CPU对内存寻址的能力；
+
+64位操作系统表示64位CPU对内存寻址的能力；
+
+32位的操作系统安装在32位CPU处理器和64位CPU处理器上；
+
+64位操作系统只能安装64位CPU处理器上；
+
+32位操作系统对内存寻址不能超过4GB；
+
+64位操作系统对内存寻址可以超过4GB，企业服务器更多安装64位操作系统，支持更多内存资源的利用；
+
+ 64位操作系统是为高性能处理需求设计，数据处理、图片处理、实时计算等领域需求；
+
+ 32位操作系统是为普通用户设计，普通办公、上网冲浪等需求。
+
+### **Linux内核命名规则**
+
+Linux内核是Linux操作系统的核心，一个完整的Linux发行版包括进程管理、内存管理、文件系统、系统管理、网络操作等部分。
+
+Linux内核官网可以下载Linux内核版本、现行版本，历史版本，可以了解版本与版本之间的特性。
+
+     Linux内核版本命名在不同的时期有其不同的命名规范，其中在2.X版本中，X如果为奇数表示开发版、X如果为偶数表示稳定版，从2.6.X以及3.X，内核版本命名就没有严格的约定规范。
+
+从Linux内核1994年发布1.0发布到目前主流3.X、4.x版本，最新稳定版本是5.14，查看Linux操作系统内核如图1-2所示：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817648284-2abf3beb-b8e4-49b7-8def-da1adcff4119.png)
+
+图1-2操作系统内核
+
+Linux内核命名格式为 “R.X.Y-Z”，其中R、X、Y、Z命名意义如下：
+
+q  数字R表示内核版本号，版本号只有在代码和内核有重大改变的时候才会改变，到目前为止有4个大版本更新。
+
+q  数字X表示内核主版本号，主版本号根据传统的奇偶系统版本编号来分配，奇数为开发版，偶数为稳定版。
+
+q  数字Y表示内核次版本号，次版本号是无论在内核增加安全补丁、修复Bug、实现新的特性或者驱动时都会改变。
+
+q  数字Z表示内核小版本号，小版本号会随着内核功能的修改、Bug修复而发生变化。
+
+官网内核版本如图1-3所示，Mainline表示主线开发版本，Stable表示稳定版本，稳定版本主要由mainline测试通过而发布。Longterm表示长期支持版，会持续更新及Bug修复，如果长期版本被标记为EOL（End of Life），则表示不再提供更新。
+
+![官网内核版本](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817648501-1fbed42d-46cb-4573-be98-7aaeb3786722.png)
+
 
 ## 目录结构
 
@@ -100,9 +157,481 @@ nginx: /usr/sbin/nginx /etc/nginx /usr/share/nginx /usr/lib/systemd/system/nginx
 2. /proc 虚拟文件系统 存放的内存中的数据
 3. /sys 同/proc类似记录内存核心与系统硬件的相关信息
 
-# 2. 常用命令
+# 第2章  Linux发展及系统安装
 
-## 2.1. 文件/目录操作
+互联网飞速发展，用户对网站体验要求也越来越高，目前主流WEB网站后端承载系统均为Linux操作系统，Android手机也是基于Linux内核而研发，企业大数据、云存储、虚拟化等先进技术也均是基于Linux操作系统为载体，满足企业的高速发展。
+
+本章向读者介绍Linux发展前景、Windows与Linux操作系统区别、硬盘分区介绍、CentOS 7 Linux操作系统安装图解及菜鸟学好Linux必备大绝招。
+
+## Windows操作系统简介
+
+为什么要学习Windows操作系统呢，了解Windows系统结构，可以让我们快速学习Linux操作系统，通过对比学习的方法，我们可以更快的学会Linux。
+
+计算机硬件组成包括：CPU、内存、网卡、硬盘、DVD光驱、电源、主板、显示器、鼠标、键盘等设备，计算机硬件是不能直接被人使用的，需要在其上安装各种操作系统，安装完操作系统，并安装驱动程序，方可进行操作、办公、上网冲浪等。
+
+计算机的硬件组成：
+
+n  CPU，相当于人的大脑，中央处理器；
+
+n  内存，存储设备，临时存储，CPU所需要数据，从内存中读取，内存读写速度很快；
+
+n  硬盘，持久化设备，内存空间小，费用高，大量的数据存在硬盘，硬盘读写速度比内存慢；（SSD、SAS、SATA）；
+
+驱动程序主要指的是设备驱动程序（Device Driver），是一种可以使[计算机](http://baike.baidu.com/item/%E8%AE%A1%E7%AE%97%E6%9C%BA)系统和设备通信的特殊程序，相当于[硬件](http://baike.baidu.com/item/%E7%A1%AC%E4%BB%B6)的接口，[操作系统](http://baike.baidu.com/item/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F)只有通过这个接口，才能控制[硬件](http://baike.baidu.com/item/%E7%A1%AC%E4%BB%B6)设备，进行资源调度。
+
+ Windows操作系统主要以窗口形式对用户展示，操作系统须安装在硬盘上，安装系统之前需对硬盘进行分区并格式化，默认Windows操作系统安装在C盘分区，D盘分区用于存放数据文件。
+
+通俗的讲，安装操作系统时，需要对磁盘进行格式化，格式化需要指定格式化的类型，告诉操作系统如何去管理磁盘空间，文件如何存放，如何查找及调用。操作系统不知道怎么存放文件以及文件结构，文件系统概念就诞生了。
+
+文件系统是[操作系统](http://baike.baidu.com/view/880.htm)用于明确[磁盘](http://baike.baidu.com/view/157418.htm)或分区上文件的方法和[数据存储结构](http://baike.baidu.com/view/9900.htm)，文件系统由三部分组成：与文件管理有关软件、被管理文件以及实施文件管理所需数据结构。
+
+Windows操作系统，文件系统类型一般有FAT、FAT16、FAT32、NTFS等，不同的文件系统类型，有不同的特性，例如NTFS文件系统类型支持文件及文件夹安全设置，而FAT32文件系统类型不支持，NTFS支持单文件最多为单个磁盘分区的容量大小2T，而FAT32单个最大文件不能超过4GB。
+
+Windows操作系统从设计层面来讲，主要用来管理[电脑硬件](https://www.baidu.com/s?wd=%E7%94%B5%E8%84%91%E7%A1%AC%E4%BB%B6&tn=44039180_cpr&fenlei=mv6quAkxTZn0IZRqIHckPjm4nH00T1d-mH04uAR1nWRdnyn3nvf0IAYqnWm3PW64rj0d0AP8IA3qPjfsn1bkrjKxmLKz0ZNzUjdCIZwsrBtEXh9GuA7EQhF9pywdQhPEUiqkIyN1IA-EUBtknjfdrjnznjfsPHDsPWb4nHT4)与软件资源的程序，大致包括五个方面的管理功能:进程与处理机管理、作业管理、存储管理、设备管理、[文件管理](https://www.baidu.com/s?wd=%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86&tn=44039180_cpr&fenlei=mv6quAkxTZn0IZRqIHckPjm4nH00T1d-mH04uAR1nWRdnyn3nvf0IAYqnWm3PW64rj0d0AP8IA3qPjfsn1bkrjKxmLKz0ZNzUjdCIZwsrBtEXh9GuA7EQhF9pywdQhPEUiqkIyN1IA-EUBtknjfdrjnznjfsPHDsPWb4nHT4)。Windwos操作系统从个人使用角度来讲，主要用于个人电脑办公、软件安装、上网冲浪、游戏、数据分析、数据存储等功能。
+
+## 硬盘分区简介
+
+学习Windows、Linux操作系统，必然要了解硬盘设备，硬盘是电脑主要的存储[媒介](http://baike.baidu.com/item/%E5%AA%92%E4%BB%8B)之一，硬盘要能够安装系统或者存放数据，必须进行分区和格式化，Windows系统常见分区有三种：主磁盘分区、扩展磁盘分区、逻辑磁盘分区。
+
+一块硬盘设备，主分区至少有1个，最多4个，扩展分区可以为0，最多1个，且主分区+扩展分区总数不能超过4个，逻辑分区可以有若干个。在Windows下激活的主分区是硬盘的启动分区，他是独立的，也是硬盘的第一个分区，通常就是我们所说的C盘系统分区。
+
+扩展分区是不能直接用的，他是以逻辑分区的方式来使用的，扩展分区可分成若干逻辑分区。他们的关系是包含的关系，所有的逻辑分区都是扩展分区的一部分。
+
+在Windows系统安装时，硬盘驱动器是通过磁盘0,磁盘1来显示,其中磁盘0表示第一块硬盘,磁盘1表示第二块硬盘,然后在第一块硬盘磁盘0上进行分区，最多不能超过4个主分区,分区为C、D、E、F。
+
+硬盘接口是[硬盘](http://baike.baidu.com/item/%E7%A1%AC%E7%9B%98)与[主机系统](http://baike.baidu.com/item/%E4%B8%BB%E6%9C%BA%E7%B3%BB%E7%BB%9F)间的连接部件，作用是在硬盘[缓存](http://baike.baidu.com/item/%E7%BC%93%E5%AD%98)和主机内存之间传输数据。不同的硬盘接口决定着硬盘与计算机之间的连接速度，在整个系统中，硬盘接口的优劣直接影响着程序运行快慢和系统性能好坏，常见的硬盘接口类型为：[IDE](http://baike.baidu.com/item/IDE)（Integrated Drive Electronics）、[SATA](http://baike.baidu.com/item/SATA)（Serial Advanced Technology Attachment）、[SCSI](http://baike.baidu.com/item/SCSI)（Small Computer System Interface）、SAS（Serial Attached SCSI）和[光纤通道](http://baike.baidu.com/item/%E5%85%89%E7%BA%A4%E9%80%9A%E9%81%93)等。
+
+[IDE接口](http://baike.baidu.com/item/IDE%E6%8E%A5%E5%8F%A3)硬盘多用于家用，部分也应用于传统[服务器](http://baike.baidu.com/item/%E6%9C%8D%E5%8A%A1%E5%99%A8)，[SCSI、SAS接口](http://baike.baidu.com/item/SCSI%E6%8E%A5%E5%8F%A3)的硬盘则主要应用于服务器市场，而光纤通道用于高端服务器上，SATA主要用于个人家庭办公电脑及低端服务器。
+
+在Linux操作系统中，读者可以看到硬盘驱动器的第一块IDE硬盘接口的硬盘设备为hda，或者SATA硬盘接口的硬盘设备为sda，主分区编号为hda1-4或者sda1-4，逻辑分区从5开始。如果有第二块硬盘，主分区编号为hdb1-4或者sdb1-4。
+
+不管是Windows还是Linux操作系统，硬盘的总容量=主分区的容量+扩展分区的容量，而扩展分区的容量=各个逻辑分区的容量之和。主分区也可成为“引导分区”，会被操作系统和主板认定为这个硬盘的第一个分区，所以C盘永远都是排在所有磁盘分区的第一的位置上。
+
+MBR（Master Boot Record）和GPT（GUID Partition Table）是在磁盘上存储分区信息的两种不同方式。这些分区信息包含了分区从哪里开始的信息，这样操作系统才知道哪个扇区是属于哪个分区的，以及哪个分区是可以启动操作系统的。
+
+在磁盘上创建分区时，必须选择MBR或者GPT，默认是MBR，也可以通过其他方式修改为GPT方式。MBR分区的硬盘最多支持4个主分区，如果想支持更多主分区，可以考虑使用GPT格式分区。
+
+## Linux安装环境准备
+
+
+## 菜鸟学好Linux大绝招
+
+Linux系统安装是初学者的门槛，系统安装完毕后，很多初学者不知道该如何学习，不知道如何快速进阶，下面作者总结了菜鸟学好Linux技能的大绝招：
+
+1. 初学者完成Linux系统分区及安装之后，需熟练掌握Linux系统管理必备命令：cd、ls、pwd、clear、chmod、chown、chattr、useradd、userdel、groupadd、vi、vim、cat、more、less、mv、cp、rm、rmdir、touch、ifconfig、ip addr、ping、route、echo、wc、expr、bc、ln、head、tail、who、hostname、top、df、du、netstat、ss、kill、alias、man、tar、zip、unzip、jar、fdisk、free、uptime、lsof、lsmod、lsattr、dd、date、crontab、ps、find、awk、sed、grep、sort、uniq等，每个命令至少练习30遍，逐步掌握每个命令的用法及应用场景；
+2. 初学者进阶之路，需熟练构建Linux下常见服务：NTP、VSFTPD、DHCP、SAMBA、DNS、Apache、MySQL、Nginx、Zabbix、Squid、Varnish、LVS、Keepalived、ELK、MQ、Zookeeper、Docker、Openstack、Hbase、Mongodb、Redis、CEPH、Prometheus、Jenkins、SVN、GIT等，遇到问题先思考，没有头绪可以借助百度、Google搜索引擎，问题解决后，将解决问题的步骤总结并形成文档；
+3. 理解操作系统的每个命令，每个服务的用途，为什么要配置这个服务，为什么需要调整该参数，只有带着目标去学习才能更快的成长，才能让你去发掘更多新知识；
+4. 熟练搭建Linux系统上各种服务之后，需要理解每个服务的完整配置和优化，可以拓展思维。例如LNMP所有服务放在一台机器上，能否分开放在多台服务器以平衡压力呢，该如何去构建和部署呢？一台物理机构建Docker虚拟化，如果是100台、1000台如何去实施呢，会遇到哪些问题呢；
+5. Shell是Linux最经典的命令解释器，Shell脚本可以实现自动化运维，平时多练习Shell脚本编程，每个Shell脚本多练习几遍，从中吸取关键的参数、语法，不断的练习，不断的提高；
+6. 建立个人学习博客，把平时工作、学习中的知识都记录到博客，一方面可以供别人参考，另一方面可以提高自己文档编写及总结的能力；
+7. 学习Linux技术是一个长期的过程，一定要坚持，遇到各种错误、问题可以借助百度、Google搜索引擎，如果解决不了，可以请教同学、朋友及你的老师；
+8. 通过以上步骤的学习方法，不断进步，如果想达到高级、资深大牛级别，还需要进一步深入学习WEB集群架构、网站负载均衡、网站架构优化、自动化运维、运维开发、虚拟化、云计算、分布式集群等知识；
+9. 最后一句话，多练习才是硬道理，实践出真知。
+
+# 第3章 CentOS系统管理
+
+## 操作系统启动概念
+
+### BIOS
+
+基本输入输出系统（Basic Input Output System，BIOS）是一组固化到计算机主板上的只读内存[镜像](http://baike.baidu.com/item/%E9%95%9C%E5%83%8F/1574)（Read Only Memory image，ROM）芯片上的程序，它保存着计算机最重要的基本输入输出的程序、系统设置信息、开机后自检程序和系统自启动程序。主要功能是为计算机提供最底层的、最直接的硬件设置和控制。
+
+### MBR
+
+### GPT
+
+### GRUB
+
+### Linux操作系统启动流程
+
+## NetworkManager概念剖析
+
+NetworkManager是2004年Red Hat启动的项目，旨在能够让Linux用户更轻松地处理现代网络需求，尤其是无线网络，能自动发现网卡并配置ip地址。类似在手机上同时开启wifi和蜂窝网络，自动探测可用网络并连接，无需手动切换。虽然初衷是针对无线网络，但在服务器领域，NM已大获成功。
+
+NM能管理各种网络：
+
+n  有线网卡、无线网卡；
+
+n  动态ip、静态ip；
+
+n  以太网、非以太网；
+
+n  物理网卡、虚拟网卡。
+
+NM使用方法：
+
+n  nmcli：命令行。这是最常用的工具，本文将详细讲解该工具使用；
+
+n  nmtui：在shell终端开启文本图形界面；
+
+n  Freedesktop applet：如GNOME上自带的网络管理工具；
+
+n  cockpit：redhat自带的基于web图形界面的"驾驶舱"工具，具有dashborad和基础管理功能。
+
+为什么要用NM？
+
+n  工具齐全：命令行、文本界面、图形界面、web；
+
+n  广纳天地：纳管各种网络，有线、无线、物理、虚拟；
+
+n  参数丰富：多达200多项配置参数（包括ethtool参数）；
+
+n  一统江湖：RedHat系、Suse系、Debian/Ubuntu系，均支持；
+
+n  大势所趋：下一个大版本的rhel只能通过NM管理网络。
+
+Nmcli使用方法：
+
+nmcli使用方法非常类似linux ip命令、cisco交换机命令，并且支持tab补全（详见本文最后的Tips），也可在命令最后通过-h、--help、help查看帮助。在nmcli中有2个命令最为常用：
+
+n  nmcli connection
+
+译作连接，可理解为配置文件，相当于ifcfg-ethX。可以简写为nmcli c
+
+n  nmcli device
+
+译作设备，可理解为实际存在的网卡（包括物理网卡和虚拟网卡）。可以简写为nmcli d
+
+在NM里，有2个维度：连接（connection）和设备（device），这是多对一的关系。想给某个网卡配ip，首先NM要能纳管这个网卡。设备里存在的网卡（即nmcli d可以看到的），就是NM纳管的。接着，可以为一个设备配置多个连接（即nmcli c可以看到的），每个连接可以理解为一个ifcfg配置文件。同一时刻，一个设备只能有一个连接活跃。可以通过nmcli c up切换连接。
+
+Nm connection有2种状态：
+
+n  活跃（带颜色字体）：表示当前该connection生效
+
+n  非活跃（正常字体）：表示当前该connection不生效
+
+Device有4种常见状态：
+
+n  connected：已被NM纳管，并且当前有活跃的connection
+
+n  disconnected：已被NM纳管，但是当前没有活跃的connection
+
+n  unmanaged：未被NM纳管
+
+n  unavailable：不可用，NM无法纳管，通常出现于网卡link为down的时候（比如ip link set ethX down）
+
+## NMCLI常见命令实战
+
+|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| #查看ip（类似于ifconfig、ip addr）<br><br>nmcli<br><br>#创建connection，配置静态ip（等同于配置ifcfg，其中BOOTPROTO=none，并ifup启动）<br><br>nmcli c add type ethernet con-name ethX ifname ethX ipv4.addr 192.168.1.100/24 ipv4.gateway 192.168.1.1 ipv4.method manual<br><br>#创建connection，配置动态ip（等同于配置ifcfg，其中BOOTPROTO=dhcp，并ifup启动）<br><br>nmcli c add type ethernet con-name ethX ifname ethX ipv4.method auto<br><br>#修改ip（非交互式）<br><br>nmcli c modify ethX ipv4.addr '192.168.1.100/24'<br><br>nmcli c up ethX<br><br>#修改ip（交互式）<br><br>nmcli c edit ethX<br><br>nmcli> goto ipv4.addresses<br><br>nmcli ipv4.addresses> change<br><br>Edit 'addresses' value: 192.168.1.100/24<br><br>Do you also want to set 'ipv4.method' to 'manual'? [yes]: yes<br><br>nmcli ipv4> save<br><br>nmcli ipv4> activate<br><br>nmcli ipv4> quit<br><br>#启用connection（相当于ifup）<br><br>nmcli c up ethX<br><br>#停止connection（相当于ifdown）<br><br>nmcli c down<br><br>#删除connection（类似于ifdown并删除ifcfg）<br><br>nmcli c delete ethX<br><br>#查看connection列表<br><br>nmcli c show<br><br>#查看connection详细信息<br><br>nmcli c show ethX<br><br>#重载所有ifcfg或route到connection（不会立即生效）<br><br>nmcli c reload<br><br>#重载指定ifcfg或route到connection（不会立即生效）<br><br>nmcli c load /etc/sysconfig/network-scripts/ifcfg-ethX<br><br>nmcli c load /etc/sysconfig/network-scripts/route-ethX<br><br>#立即生效connection，有3种方法<br><br>nmcli c up ethX<br><br>nmcli d reapply ethX<br><br>nmcli d connect ethX<br><br>#查看device列表<br><br>nmcli d<br><br>#查看所有device详细信息<br><br>nmcli d show<br><br>#查看指定device的详细信息<br><br>nmcli d show ethX<br><br>#激活网卡<br><br>nmcli d connect ethX<br><br>#关闭无线网络（NM默认启用无线网络）<br><br>nmcli r all off<br><br>#查看NM纳管状态<br><br>nmcli n<br><br>#开启NM纳管<br><br>nmcli n on<br><br>#关闭NM纳管（谨慎执行）<br><br>nmcli n off<br><br>#监听事件<br><br>nmcli m<br><br>#查看NM本身状态<br><br>nmcli<br><br>#检测NM是否在线可用<br><br>nm-online |
+
+## TCP/IP协议概述
+
+要学好Linux，对网络协议也要有充分的了解和掌握，例如传输控制协议/[因特网](http://baike.baidu.com/view/1706.htm)互联协议（Transmission Control Protocol/Internet Protocol，TCP/IP），TCP/IP名为网络[通讯协议](http://baike.baidu.com/view/278358.htm)，是Internet最基本的协议、Internet国际[互联网](http://baike.baidu.com/view/6825.htm)络的基础，由[网络层](http://baike.baidu.com/view/239600.htm)的IP协议和[传输层](http://baike.baidu.com/view/239605.htm)的TCP协议组成。
+
+TCP/IP 定义了电子设备如何连入[因特网](http://baike.baidu.com/view/1706.htm)，以及数据如何在它们之间传输的标准。协议采用了4层的层级结构，每一层都呼叫它的下一层所提供的协议来完成自己的需求。
+
+TCP负责发现[传输](http://baike.baidu.com/view/389471.htm)的问题，一有问题就发出信号，要求重新传输，直到所有[数据安全](http://baike.baidu.com/view/2308446.htm)正确地传输到目的地，而IP是给[因特网](http://baike.baidu.com/view/1706.htm)的每台联网设备规定一个地址。
+
+基于TCP/IP的参考模型将协议分成四个层次，它们分别是网络接口层、网际互连层（IP层）、[传输层](http://baike.baidu.com/view/239605.htm)（TCP层）和应用层。如图3-9为TCP/IP跟OSI参考模型层次的对比：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817661366-21a5ea5f-5aec-4689-adf2-05e75ba90c80.png)
+
+图3-9 ISO7层模型与TCP/IP四层对比
+
+     OSI模型与TCP/IP模型协议功能实现对照表，如图3-10所示：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817661533-64561174-9ec2-4624-97ee-057c06b0f9e6.png)
+
+图3-10 ISO7层模型与TCP/IP层次功能对比
+
+## IP地址及网络常识
+
+互联网协议地址（Internet Protocol Address，IP），IP地址是[IP协议](http://baike.baidu.com/view/2802.htm)提供的一种统一的地址格式，它为互联网上的每一个网络和每一台主机分配一个逻辑地址，以此来屏蔽物理地址的差异。IP地址被用来给[Internet](http://baike.baidu.com/view/11165.htm)上的每个通信设备的一个编号，每台联网的PC上都需要有IP地址，这样才能正常通信。
+
+IP地址是一个32位的二进制数，通常被分割为4个“8位[二进制](http://baike.baidu.com/view/18536.htm)数”（即4个字节）。IP地址通常用“[点分十进制](http://baike.baidu.com/view/828066.htm)”表示成（a.b.c.d）的形式，其中，a,b,c,d都是0~255之间的十进制整数。
+
+常见的IP地址，分为[IPv4](http://baike.baidu.com/view/21992.htm)与[IPv6](http://baike.baidu.com/view/5228.htm)两大类。IP地址编址方案将IP地址空间划分为A、B、C、D、E五类，其中A、B、C是基本类，D、E类作为多播和保留使用。
+
+IPV4有4段数字，每一段最大不超过255。由于互联网的蓬勃发展，IP位址的需求量愈来愈大，使得IP位址的发放愈趋严格，各项资料显示全球IPv4位址在2011年已经全部分发完毕。
+
+地址空间的不足必将妨碍互联网的进一步发展。为了扩大[地址空间](http://baike.baidu.com/view/1507129.htm)，拟通过IPv6重新定义地址空间。IPv6采用128位地址长度。在IPv6的设计过程中除了一劳永逸地解决了地址短缺问题以外，IPV6的诞生可以给全球每一粒沙子配置一个IP地址，还考虑了在IPv4中解决不好的其它问题，如图3-11所示：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817661747-81487434-c6cb-4535-9685-5759b597c38b.png)
+
+图3-11 IPV4与IPV6地址
+
+### **IP** **地址分类**
+
+IPV4地址编址方案有A、B、C、D、E五类，其中A、B、C是基本类，D、E类作为多播和保留使用，如下为分类详解：
+
+1.      A类IP地址
+
+一个A类IP地址是指，在IP地址的四段号码中，第一段号码为网络号码，剩下的三段号码为本地计算机的号码。如果用二进制表示IP地址的话，A类IP地址就由1字节的网络地址和3字节主机地址组成，网络地址的最高位必须是“0”。A类IP地址中网络的标识长度为8位，主机标识的长度为24位，A类网络地址数量较少，有126个网络，每个网络可以容纳主机数达1600万台。
+
+A类IP地址 地址范围1.0.0.0到127.255.255.255 （二进制表示为：00000001 00000000 00000000 00000000 - 01111110 11111111 11111111 11111111），最后一个为广播地址，A类IP地址的子网掩码为255.0.0.0，每个网络支持的最大主机数为256的3次方-2=16777214台。
+
+2.      B类IP地址
+
+一个B类IP地址是指在IP地址的四段号码中，前两段号码为网络号码。如果用二进制表示IP地址的话，B类IP地址就由2字节的网络地址和2字节主机地址组成，网络地址的最高位必须是“10”。
+
+B类IP地址中网络的标识长度为16位，主机标识的长度为16位，B类网络地址适用于中等规模的网络，有16384个网络，每个网络所能容纳的计算机数为6万多台。
+
+B类IP地址地址范围128.0.0.0-191.255.255.255（二进制表示为：10000000 00000000 00000000 00000000----10111111 11111111 11111111 11111111）。
+
+ 最后一个是广播地址，B类IP地址的子网掩码为255.255.0.0，每个网络支持的最大主机数为256的2次方-2=65534台。
+
+3.      C类IP地址
+
+一个C类IP地址是指在IP地址的四段号码中，前三段号码为网络号码，剩下的一段号码为本地计算机的号码。如果用二进制表示IP地址的话，C类IP地址就由3字节的网络地址和1字节主机地址组成，网络地址的最高位必须是“110”。C类IP地址中网络的标识长度为24位，主机标识的长度为8位，C类网络地址数量较多，有209万余个网络。适用于小规模的局域网络，每个网络最多只能包含254台计算机。
+
+C类IP地址范围192.0.0.0-223.255.255.255[3]  （二进制表示为: 11000000 00000000 00000000 00000000 - 11011111 11111111 11111111 11111111）。C类IP地址的子网掩码为255.255.255.0，每个网络支持的最大主机数为256-2=254台。
+
+4.      D类IP地址
+
+D类IP地址又称之为多播地址(Multicast Address)，即组播地址。在以太网中，多播地址命名了一组应该在这个网络中应用接收到一个分组的站点。多播地址的最高位必须是“1110”，范围从224.0.0.0到239.255.255.255。
+
+5.      特殊的地址
+
+每一个字节都为0的地址（“0.0.0.0”）表示当前主机，IP地址中的每一个字节都为1的IP地址（“255．255．255．255”）是当前子网的广播地址，IP地址中凡是以“11110”开头的E类IP地址都保留用于将来和实验使用。
+
+IP地址中不能以十进制“127”作为开头，而以数字127．0．0．1到127．255．255．255段的IP地址称为回环地址，用于回路测试，如：127.0.0.1可以代表本机IP地址，网络ID的第一个8位组也不能全置为“0”，全“0”表示本地网络。
+
+### **子网掩码**
+
+子网掩码(Subnet Mask)又名[网络掩码](http://baike.baidu.com/view/1169777.htm)、[地址掩码](http://baike.baidu.com/view/4040643.htm)，它是一种用来指明一个[IP地址](http://baike.baidu.com/view/3930.htm)的哪些位标识的是[主机](http://baike.baidu.com/view/23880.htm)所在的子网，以及哪些位标识的是主机的位掩码。
+
+通常的讲，子网掩码不能单独存在，它必须结合IP地址一起使用。子网掩码只有一个作用，就是将某个IP地址划分成[网络地址](http://baike.baidu.com/view/547479.htm)和[主机地址](http://baike.baidu.com/view/547482.htm)两部分。
+
+子网掩码是一个32位地址，用于屏蔽IP地址的一部分以区别网络标识和主机标识，并说明该IP地址是在局域网上，还是在远程网上。
+
+对于A类地址，默认的子网掩码是255.0.0.0，而对于B类地址来说默认的子网掩码是255.255.0.0；对于C类地址来说默认的子网掩码是255.255.255.0。
+
+[互联网](http://baike.baidu.com/view/6825.htm)是由各种小型[网络构成](http://baike.baidu.com/view/2039649.htm)的，每个网络上都有许多[主机](http://baike.baidu.com/view/23880.htm)，这样便构成了一个有层次的结构。IP地址在设计时就考虑到地址分配的层次特点，将每个IP地址都分割成[网络号](http://baike.baidu.com/view/2271538.htm)和[主机](http://baike.baidu.com/view/23880.htm)号两部分，以便于IP地址的[寻址](http://baike.baidu.com/view/1303626.htm)操作。
+
+子网掩码的设定必须遵循一定的规则。与[二进制](http://baike.baidu.com/item/%E4%BA%8C%E8%BF%9B%E5%88%B6)IP地址相同，子网掩码由1和0组成，且1和0分别连续。子网掩码的长度也是32位，左边是网络位，用[二进制](http://baike.baidu.com/item/%E4%BA%8C%E8%BF%9B%E5%88%B6)数字“1”表示，1的数目等于网络位的长度；右边是主机位，用二进制数字“0”表示，0的数目等于主机位的长度。
+
+### **网关地址**
+
+[网关](http://baike.baidu.com/view/807.htm)（Gateway）是一个网络连接到另一个网络的“关口”， 网关实质上是一个网络通向其他网络的IP[地址](http://baike.baidu.com/view/494802.htm)。主要用于不同网络传输数据。
+
+例如我们电脑设备上网，如果是接入到同一个交换机，在交换机内部传输数据是不需要经过网关的，但是如果两台设备不在一个交换机网络，则需要在本机配置网关，内网服务器的数据通过网关，网关把数据转发到其他的网络的网关，直至找到对方的主机网络，然后返回数据。
+
+### **MAC** **地址**
+
+媒体访问控制（Media Access Control或者Medium Access Control，MAC），也即是物理地址、硬件地址，用来定义[网络设备](http://baike.baidu.com/view/1158081.htm)的位置。
+
+在[OSI模型](http://baike.baidu.com/view/571842.htm)中，第三层[网络层](http://baike.baidu.com/view/239600.htm)负责 [IP地址](http://baike.baidu.com/view/3930.htm)，第二层数据链路层则负责 MAC地址。因此一个主机会有一个MAC地址，而每个[网络位置](http://baike.baidu.com/view/1643855.htm)会有一个专属于它的IP地址。
+
+IP地址工作在OSI参考模型的第三层网络层。两者之间分工明确，默契合作，完成通信过程。IP地址专注于网络层，将数据包从一个网络转发到另外一个网络；而MAC地址则专注于数据链路层，将一个数据帧从一个节点传送到相同链路的另一个节点。
+
+IP地址和MAC地址一般是成对出现。如果一台计算机要和网络中另一外计算机通信，那么这两台设备必须配置IP地址和MAC地址，而MAC地址是网卡出厂时设定的，这样配置的IP地址就和MAC地址形成了一种对应关系。
+
+在数据通信时，IP地址负责表示计算机的网络层地址，网络层设备（如路由器）根据IP地址来进行操作；MAC地址负责表示计算机的数据链路层地址，数据链路层设备，根据MAC地址来进行操作。IP和MAC地址这种映射关系是通过[地址解析协议](http://baike.baidu.com/view/149421.htm)（Address Resolution Protocol，ARP）来实现的。
+
+## Linux系统配置IP
+
+Linux操作系统安装完毕，那接下来如何让Linux操作系统能上外网呢？如下为Linux服务器配置IP的方法。
+
+     Linux服务器网卡默认配置文件在/etc/sysconfig/network-scripts/下，命名的名称一般为:ifcfg-eth0或者ifcfg-ens32 ，例如DELL R720标配有4块千兆网卡，在系统显示的名称依次为：eth0、eth1、eth2、eth3。
+
+修改服务器网卡IP地址命令为vi /etc/sysconfig/network-scripts/ifcfg-eth0 （注CentOS7网卡名ifcfg-ens32）。vi命令打开网卡配置文件，默认为DHCP方式，配置如下：
+
+|   |
+|---|
+|DEVICE=eth0<br><br>BOOTPROTO=dhcp<br><br>HWADDR=00:0c:29:52:c7:4e<br><br>ONBOOT=yes<br><br>TYPE=Ethernet|
+
+vi命令打开网卡配置文件，修改BOOTPROTO为DHCP方式，同时添加IPADDR、NETMASK、GATEWAY信息如下：
+
+|   |
+|---|
+|DEVICE=eth0<br><br>BOOTPROTO=static<br><br>HWADDR=00:0c:29:52:c7:4e<br><br>ONBOOT=yes<br><br>TYPE=Ethernet<br><br>IPADDR=192.168.1.103<br><br>NETMASK=255.255.255.0<br><br>GATEWAY=192.168.1.1|
+
+服务器网卡配置文件，详细参数如下：
+
+|   |
+|---|
+|DEVICE=eth0   #物理设备名ONBOOT=yes   # [yes\|no]（重启网卡是否激活网卡设备）BOOTPROTO=static #[none\|static\|bootp\|dhcp]（不使用协议\|静态分配\|BOOTP协议\|DHCP协议）<br><br>TYPE=Ethernet           #网卡类型<br><br>IPADDR=192.168.1.103    #IP地址NETMASK=255.255.255.0  #子网掩码GATEWAY=192.168.1.1    #网关地址|
+
+服务器网卡配置完毕后，重启网卡服务：/etc/init.d/network restart 即可。
+
+然后查看ip地址，命令为：ifconfig或者ip addr show 查看当前服务器所有网卡的IP地址。
+
+CentOS 7 Linux中，如果没有ifconfig命令，可以用ip addr list/show查看，也可以安装ifconfig命令，需安装软件包net-tools，命令如图3-12所示：
+
+|   |
+|---|
+|yum install net-tools -y|
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817661902-2cf6b853-bed5-4d6e-80da-312797d7ddd1.png)
+
+图3-12 YUM安装net-tools工具
+
+## Linux系统配置DNS
+
+如上网卡IP地址配置完毕，如果服务器需上外网，还需配置域名解析地址（Domain Name System，DNS），DNS主要用于将请求的域名转换为IP地址，DNS地址配置方法如下：
+
+修改vi  /etc/resolv.conf 文件，在文件中加入如下两条:
+
+|   |
+|---|
+|nameserver 202.106.0.20<br><br>nameserver 8.8.8.8|
+
+如上分别表示主DNS于备DNS，DNS配置完毕后，无需重启网络服务,DNS是立即生效。
+
+可以ping  -c  6  [www.baidu.com](http://www.baidu.com/) 查看返回结果，如果有IP返回，则表示服务器DNS配置正确，如图3-13所示：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817662115-c2b3b60c-bfa7-4f9d-96d4-78fe5ee95b74.png)
+
+图3-13 ping命令返回值
+
+## Linux网卡名称命名
+
+CentOS7服务器，默认网卡名为ifcfg-ens32，如果我们想改成ifcfg-eth0，使用如下步骤即可：
+
+（1）      编辑/etc/sysconfig/grub文件，命令为vi /etc/sysconfig/grub，在倒数第二行quiet后加入如下代码，并如图3-14所示：
+
+|   |
+|---|
+|net.ifnames=0 biosdevname=0|
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817662323-aa4855b6-b0f4-4a24-93a2-2c390563fbb4.png)
+
+图3-14 网卡配置ifnames设置
+
+（2）      执行命令grub2-mkconfig -o /boot/grub2/grub.cfg，生成新的grub.cfg文件，如图3-15所示：
+
+|   |
+|---|
+|grub2-mkconfig -o /boot/grub2/grub.cfg|
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817662514-aae8d23e-620b-450c-ba3b-cc189fd4ac07.png)
+
+图3-15 生成新的grub.cnf文件
+
+（3）      重命名网卡名称，执行命令mv ifcfg-ens32 ifcfg-eth0，修改ifcfg-eth0文件中DEVICE= ens32为DEVICE= eth0，如图3-16所示：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817662732-473a07d8-fd45-49df-aeb3-b021023d4e42.png)
+
+图3-16 重命名网卡名称
+
+（4）      重启服务器，并验证网卡名称是否为eth0，Reboot完后，如图3-17所示：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817662927-1734993a-d968-49b9-a970-ab822073200c.png)图3-17 验证网卡设备名称
+
+## CentOS7和8密码重置
+
+修改CentOS7 ROOT密码非常简单，只需登录系统，执行命令passwd回车即可，但是如果忘记ROOT，无法登录系统，该如何去重置ROOT用户的密码呢？如下为重置ROOT用户的密码的方法：
+
+（1）      Reboot重启系统，系统启动进入欢迎界面，加载内核步骤时，按e，然后选中“CentOS Linux （3.10.0-327.e17.x86_64）7 （Core）”，如图3-18所示：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817663170-cac6d9e3-2d8f-499a-b471-74320bfe2c32.png)
+
+图3-18 内核菜单选择界面
+
+（2）      继续按e进入编辑模式，找到ro  crashkernel=auto xxx项，将ro改成rw init=/sysroot/bin/sh，如图3-19-1和2所示：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817663349-43f75516-55f8-4391-8cfc-6bb6dfd04851.png)
+
+图3-19-1 （CentOS7）内核编辑界面
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817663580-00d130f1-1921-4ec0-8af5-162f49e57028.png)
+
+图3-19-2（CentOS8） 内核编辑界面
+
+（3）      修改为后如图3-20所示：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817663770-5695d746-7d58-4702-8f07-0697d05c300d.png)
+
+图3-20 内核编辑界面
+
+（4）      按ctrl+x按钮进入单用户模式，如图3-21所示：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817663957-2439da6d-aeae-40f4-a5b9-e0c2c366e76d.png)
+
+图3-21 进入系统单用户模式
+
+（5）      执行命令chroot  /sysroot访问系统，并使用passwd修改root密码，如图3-22所示：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817664173-4e7cbef3-c55d-4cc6-83c2-00d62f93133b.png)
+
+图3-22 修改ROOT用户密码
+
+（6）      更新系统信息，touch  /.autorelabel，执行命令touch /.autorelabel，在/目录下创建一个.autorelabel文件，如果该文件存在，系统在重启时就会对整个文件系统进行relabeling重新标记，可以理解为对文件进行底层权限的控制和标记，如果seLinux属于disabled关闭状态则不需要执行这条命令，如图3-23所示：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817664452-776667c9-2ba6-49df-853b-00b42cd36118.png)
+
+图3-23 创建autorelabel文件
+
+## 远程管理Linux服务器
+
+系统安装完毕后，可以通过远程工具来连接到Linux服务器，远程连接服务器管理的好处在于可以跨地区管理服务器，例如读者在北京，想管理的服务器在上海某IDC机房，通过远程管理后，不需要到IDC机房现场去操作，直接通过远程工具即可管理，与在现场的管理是一模一样。
+
+远程管理Linux服务器要满足如下三个步骤：
+
+（1）      服务器配置IP地址，如果服务器在公网，需配置公网IP，如果服务器在内部局域网，可以直接配置内部私有IP即可；
+
+（2）      服务器安装SSHD软件服务并启动该服务，几乎所有的Linux服务器系统安装完毕均会自动安装并启动SSHD服务，SSHD服务监听22端口，关于SSHD服务、OpenSSH及SSH协议后面章节会讲解；
+
+（3）      在服务器中防火墙服务需要允许22端口对外开放，初学者可以临时关闭防火墙，CentOS6 Linux关闭防火墙的命令：service iptables stop，而CentOS7 Linux关闭防火墙的命令：systemctl  stop  firewalld.service。
+
+常见的Linux远程管理工具包括：SecureCRT、Xshell、Putty、Xmanger等工具。目前主流的远程管理Linux服务器工具为SecureCRT，官网[https://www.vandyke.com](https://www.vandyke.com) 下载并安装SecureCRT，打开工具，点击左上角quick connect快速连接，弹出界面如图3-24所示，连接配置具体步骤如下：
+
+q  协议（P）：选择SSH2
+
+q  主机名（H）：输入Linux服务器IP地址
+
+q  端口（o）: 22
+
+q  防火墙（F）：None
+
+q  用户名（U）：root
+
+单击下方的“连接”，会提示输入密码，输入root用户对应密码即可。
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817664694-f323a099-474a-4cd6-aa5a-2b95e8024854.png)
+
+图3-24 SecureCRT远程Linux服务器
+
+通过SecureCRT远程连接Linux服务器之后，会发现如图3-25所示界面，与服务器本地操作界面一样，在命令行可以执行命令，操作结果与在服务器现场操作是一样。
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817664899-1f1b5a16-a97f-4a62-9643-25a0b3c815de.png)
+
+图3-25  SecureCRT远程Linux服务器
+
+## Linux系统目录功能
+
+通过以上知识的学习,读者已经能够独立安装并配置Linux服务器IP并远程连接，为了进一步学习Linux，需熟练掌握Linux系统各个目录的功能。
+
+Linux主要树结构目录包括：/、/root、/home、/usr、/bin、/tmp、/sbin、/proc、/boot等，如图3-26所示，为典型的Linux目录结构如下：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/23135285/1737817665126-22e62704-5f02-4124-9f85-0d3a9cd6e8c4.png)
+
+图3-26 Linux目录树形结构
+
+Linux系统中常见目录功能如下：
+
+q  / 根目录；
+
+q  /bin 存放必要的命令；
+
+q  /boot 存放内核以及启动所需的文件；
+
+q  /[dev](http://www.baike.com/wiki/dev) 存放硬件设备文件；
+
+q  /etc 存放系统配置文件；
+
+q  /home 普通用户的宿主目录，用户数据存放在其主目录中； 
+
+q  /lib|lib64  存放必要的运行库；
+
+q  /mnt 存放临时的映射文件系统，通常用来挂载使用；
+
+q  /proc 存放存储进程和系统信息；
+
+q  /root 超级用户的主目录；
+
+q  /sbin 存放系统管理程序；
+
+q  /tmp 存放临时文件；
+
+q  /usr  存放应用程序，命令程序文件、程序库、手册和其它文档；
+
+q  /var  系统默认日志存放目录。
+# 第4章 Linux必备命令集
+
+## 文件/目录操作
 
 ### 2.1.1. mkdir
 
@@ -153,14 +682,14 @@ rm -rf ./xxx/xx
 
 #### 2.1.5.2. `find` 时间相关参数
 
-|参数|单位|含义|数字前符号解释|
-|---|---|---|---|
-|`-mtime n`|天（24 小时）|文件 **内容最后修改时间**|`n`<br><br>= 恰好 n 天前，`+n`<br><br>= 超过 n 天前，`-n`<br><br>= 少于 n 天前|
-|`-atime n`|天（24 小时）|文件 **最后访问时间**|同上|
-|`-ctime n`|天（24 小时）|文件 **状态变化时间**（权限、所有者、链接数等）|同上|
-|`-mmin n`|分钟|文件 **内容最后修改时间**|`n`<br><br>= 恰好 n 分钟前，`+n`<br><br>= 超过 n 分钟前，`-n`<br><br>= 少于 n 分钟前|
-|`-amin n`|分钟|文件 **最后访问时间**|同上|
-|`-cmin n`|分钟|文件 **状态变化时间**|同上|
+| 参数         | 单位       | 含义                         | 数字前符号解释                                                             |
+| ---------- | -------- | -------------------------- | ------------------------------------------------------------------- |
+| `-mtime n` | 天（24 小时） | 文件 **内容最后修改时间**            | `n`<br><br>= 恰好 n 天前，`+n`<br><br>= 超过 n 天前，`-n`<br><br>= 少于 n 天前    |
+| `-atime n` | 天（24 小时） | 文件 **最后访问时间**              | 同上                                                                  |
+| `-ctime n` | 天（24 小时） | 文件 **状态变化时间**（权限、所有者、链接数等） | 同上                                                                  |
+| `-mmin n`  | 分钟       | 文件 **内容最后修改时间**            | `n`<br><br>= 恰好 n 分钟前，`+n`<br><br>= 超过 n 分钟前，`-n`<br><br>= 少于 n 分钟前 |
+| `-amin n`  | 分钟       | 文件 **最后访问时间**              | 同上                                                                  |
+| `-cmin n`  | 分钟       | 文件 **状态变化时间**              | 同上                                                                  |
 
 **示例**
 
@@ -3662,9 +4191,78 @@ journalctl /usr/sbin/sshd
 
 ```
 
-# 3. 用户与权限
+# 第5章  Linux用户及权限管理
 
-### 3.1.1. useradd
+Linux是一个多用户的操作系统，引入用户，可以更加方便管理Linux服务器，系统默认需要以一个用户的身份登入，而且在系统上启动进程也需要以一个用户身份去运行，用户可以限制某些进程对特定资源的权限控制。
+
+## Linux用户及组
+
+Linux操作系统对多用户的管理，是非常繁琐的，所以用组的概念来管理用户就变得简单，每个用户可以在一个独立的组，每个组也可以有零个用户或者多个用户。
+
+Linux系统用户是根据用户ID来识别的，从默认ID编号从0开始，但是为了和老式系统兼容，用户ID限制在60000以下，Linux用户分总共分为四种，分别如下：
+1. root用户  （ID 0）
+2. 预分配用户 （ID 1-200）
+3. 系统用户  （ID 201-999）
+4. 普通用户  （ID 1000以上）
+
+Linux系统中的每个文件或者文件夹，都有一个所属用户及所属组，使用id命令可以显示当前用户的信息，使用passwd命令可以修改当前用户密码。Linux操作系统用户的特点如下：
+
+1. 每个用户拥有一个UserID，操作系统实际读取的是UID，而非用户名；
+2. 每个用户属于一个主组，属于一个或多个附属组，一个用户最多有31个附属组；
+3. 每个组拥有一个GroupID；
+4. 每个进程以一个用户身份运行，该用户可对进程拥有资源控制权限；
+5. 每个可登陆用户拥有一个指定的Shell环境。
+
+## Linux用户管理
+
+Linux用户在操作系统可以进行日常管理和维护，涉及到的相关配置文件如下：
+
+/etc/passwd     保存用户信息
+
+/etc/shdaow     保存用户密码（以加密形式保存）
+
+/etc/group      保存组信息
+
+/etc/login.defs   用户属性限制,密码过期时间,密码最大长度等限制
+
+/etc/default/useradd 显示或更改默认的useradd配置文件
+
+如需创建新用户，可以使用命令useradd，执行命令useradd  jfedu1即可创建jfedu1用户，同时会创建一个同名的组jfedu1，默认该用户属于jfedu1主组。
+
+Useradd jfedu1命令默认创建用户jfedu1，会根据如下步骤进行操作：
+
+读取/etc/default/useradd，根据配置文件执行创建操作；
+
+在/etc/passwd文件中添加用户信息；
+
+如使用passwd命令创建密码，密码会被加密保存在/etc/shdaow中；
+
+为jfedu1创建家目录：/home/jfedu1；
+
+将/etc/skel中的.bash开头的文件复制至/home/jfedu1家目录；
+
+创建与用户名相同的jfedu1组，jfedu1用户默认属于jfeud1同名组；
+
+Jfedu1组信息保存在/etc/group配置文件中。
+
+## Linux组管理
+
+所有的Linux或者Windows系统都有组的概念，通过组可以更加方便的管理用户，组的概念应用于各行行业，例如企业会使用部门、职能或地理区域的分类方式来管理成员，映射在Linux系统，同样可以创建用户，并用组的概念对其管理。
+
+Linux组有如下特点：
+1. 每个组有一个组ID；
+2. 组信息保存在/etc/group中；
+3. 每个用户至少拥有一个主组，同时还可以拥有31个附属组。
+
+```
+id       # 显示 UID, GID, 所属组
+groups   # 显示当前用户属于哪些组
+cat /etc/passwd   # 查看所有用户
+cat /etc/group    # 查看所有组
+```
+
+
+## useradd
 
 `useradd`用于Linux中创建的新的系统用户。useradd可用来建立用户帐号。帐号建好之后，再用passwd设定帐号的密码．而可用userdel删除帐号。使用useradd指令所建立的帐号，实际上是保存在/etc/passwd文本文件中。
 
@@ -3688,7 +4286,7 @@ useradd [option] 用户名
 -u<uid>			：指定用户id。
 ```
 
-### 3.1.2. passwd
+## passwd
 
 `**passwd**`用于设置用户的认证信息，包括用户密码、密码过期时间等。系统管理者则能用它管理系统用户的密码。只有管理者可以指定用户名称，一般用户只能变更自己的密码。
 
@@ -3717,9 +4315,24 @@ passwd: all authentication tokens updated successfully.
 $ echo "Admin@h3c" | passwd --stdin xiaoming
 ```
 
-  
+## usermod
 
-### 3.1.3. userdel
+```shell
+# 将jfedu用户属组修改为jfedu1，jfedu2附属组；
+usermod -G jfedu1,jfedu2 jfedu
+# 将jfedu用户加入到jfedu3，jfedu4附属组，-a为添加新组，原组保留
+usermod  –a  -G  jfedu3,jfedu4  jfedu
+# 修改jfedu用户，并指定新的家目录，同时指定其登陆的SHELL；
+usermod -d  /tmp/  -s  /bin/sh jfedu
+# 将jfedu用户名修改为jfedu1
+usermod -l jfedu1 jfedu
+# 锁定jfedu1用户及解锁jfedu1用户方法
+usermod –L  jfedu1
+usermod   -U  jfedu1
+
+```
+
+## userdel
 
 
 ```
@@ -3740,40 +4353,49 @@ $ userdel -rf xiaohong
 $ ls -l /opt/
 ```
 
-👌 这个问题非常基础但特别重要，很多人就是对 Linux 用户、权限体系没理清楚，所以 `chmod`、`chown`、`chgrp` 用起来感觉“玄学”。我给你系统梳理一遍，讲清底层逻辑 + 实用命令，最后再推荐一些学习资料。
+## groupadd 
+
+```
+groupadd用法
+
+-f, --force                       如果组已经存在则成功退出；
+
+                                   并且如果 GID 已经存在则取消 –g；
+
+-g, --gid GID                  为新组使用 GID；
+
+-h, --help                    显示此帮助信息并推出；
+
+-K, --key KEY=VALUE         不使用 /etc/login.defs 中的默认值；
+
+-o, --non-unique                  允许创建有重复 GID 的组；
+
+-p, --password PASSWORD  为新组使用此加密过的密码；
+
+-r, --system                  创建一个系统账户；
+
+groupmod用法        
+
+-g, --gid GID                 将组 ID 改为 GID；
+
+-h, --help                    显示此帮助信息并推出；
+
+-n, --new-name NEW_GROUP    改名为 NEW_GROUP；
+
+-o, --non-unique                  允许使用重复的 GID；
+
+-p, --password PASSWORD  将密码更改为(加密过的) PASSWORD；
+
+groupdel用法
+
+groupdel jfedu                 删除jfedu组；
+```
+## groupdel
+## groupmod
 
 ---
 
-  
-
-### 3.1.4. 用户与组 (User & Group)
-
-Linux 是 **多用户、多任务系统**，每个文件都和 **用户**、**组** 挂钩。
-
-- **用户 (User)**
-
-- 用 `id` 或 `whoami` 查看当前用户
-- 系统用 **UID (User ID)** 来标识用户（数字形式，通常普通用户是 1000 起）
-- 超级用户 root 的 UID 是 0
-
-- **组 (Group)**
-
-- 多个用户可以归属于同一个组
-- 系统用 **GID (Group ID)** 标识组
-- 一个用户可以属于多个组（主组 + 附加组）
-
-🔧 查看用户和组：
-
-```
-id       # 显示 UID, GID, 所属组
-groups   # 显示当前用户属于哪些组
-cat /etc/passwd   # 查看所有用户
-cat /etc/group    # 查看所有组
-```
-
----
-
-### 3.1.5. 文件权限 (File Permissions)
+## Linux权限管理
 
 Linux 用三类权限控制文件访问：
 
@@ -3915,6 +4537,8 @@ chmod u+x file   # 给属主增加执行权限
 chmod g-w file   # 去掉属组写权限
 chmod o=r file   # 设置其他人只读
 chmod a+r file   # 给所有人加读权限
+chmod  –R  u+rwx,g+rwx,o+rwx  jfedu.net
+
 ```
 
 (2) 数字法
@@ -3935,7 +4559,10 @@ chmod a+r file   # 给所有人加读权限
 - 属主 6 = rw-
 - 属组 4 = r--
 - 其他 4 = r--
-
+```
+chmod  –R  777  jfedu.net
+chmod  –R  555  jfedu.net
+```
 ---
 
 #### 3.1.7.2. `chown` 改所有者
@@ -3944,6 +4571,8 @@ chmod a+r file   # 给所有人加读权限
 chown bob file        # 把属主改为 bob
 chown bob:devs file   # 把属主改为 bob，属组改为 devs
 chown :devs file      # 只改属组
+
+
 ```
 
 递归修改目录：
@@ -3962,7 +4591,7 @@ chgrp devs file
 
 ---
 
-### 3.1.8. 特殊权限位
+## Linux特殊权限及掩码
 
 - **suid (Set User ID)**：可执行文件执行时，使用文件属主的权限，前提这个用户或者组有执行权限
 - **sgid (Set Group ID)**：目录内新建文件自动继承目录的组（ 程序运行时临时切换为文件属组 ）
@@ -3990,7 +4619,7 @@ chmod +t dir     # 设置 sticky bit（常见于 /tmp）
 
 ---
 
-### 3.1.9. 实际应用场景
+### 实际应用场景
 
 - 给脚本加执行权限：
 
@@ -4013,7 +4642,7 @@ chown -R 1000:1000 ./jenkins-data
 
 ---
 
-### 3.1.10. 学习资料推荐
+### 学习资料推荐
 
 📖 官方文档 & 教程：
 
@@ -4022,13 +4651,6 @@ chown -R 1000:1000 ./jenkins-data
 - [Linux 文件权限与属性 - 阮一峰](https://www.ruanyifeng.com/blog/2010/02/linux_file_permissions.html)
 
 ---
-
-✅ **一句话总结**  
-Linux 权限体系 = **用户/组 → 文件属主/属组 → 三类权限 (rwx)**，配合 `chmod`、`chown`、`chgrp` 就能完全控制谁能做什么。
-
----
-
-要不要我帮你做一个 **Linux 权限速查表（常见 chmod/chown 命令 + 对应含义）**，这样你以后查权限不会懵？
 
 # 4. 进程与任务管理
 

@@ -5,7 +5,7 @@
 #### 安装c++编译器
 
 1. 下载[microsoft C++生产工具](https://visualstudio.microsoft.com/zh-hans/visual-cpp-build-tools/)
-2. 勾选并下载指定工具![](学习笔记/Attachments/1725345791717-ca491e50-7dd0-408b-875c-67bf4ea26f87.png)
+2. 勾选并下载指定工具![](/Attachments/1725345791717-ca491e50-7dd0-408b-875c-67bf4ea26f87.png)
 
 #### 安装rust
 

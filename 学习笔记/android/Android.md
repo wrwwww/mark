@@ -2,7 +2,7 @@
 
 ## Activity的生命周期
 
-![](学习笔记/Attachments/1741677609179-78f6a284-493f-429b-bff6-20322cf18678.png)
+![](Attachments/1741677609179-78f6a284-493f-429b-bff6-20322cf18678.png)
 
 ### onCreate()
 
@@ -32,7 +32,7 @@
 
 ### onStop()
 
-当您的 activity 不再对用户可见时，它会进入 _已停止_状态，系统将调用 `[onStop()](https://developer.android.google.cn/reference/android/app/Activity?hl=zh-cn#onStop\(\))` 回调。当新启动的 activity 覆盖整个屏幕时，可能会发生这种情况。
+当您的 activity 不再对用户可见时，它会进入 _已停止_状态，系统将调用 [onStop()](https://developer.android.google.cn/reference/android/app/Activity?hl=zh-cn#onStop\(\)) 回调。当新启动的 activity 覆盖整个屏幕时，可能会发生这种情况。
 
 ### onDestroy()
 

@@ -9,7 +9,7 @@
 [https://developer.aliyun.com/mvn/guide](https://developer.aliyun.com/mvn/guide)  
 maven 安装目录的 **conf/settings.xml** 在标签中添加 mirror 子节点:
 
-[📎settings.xml](https://www.yuque.com/attachments/yuque/0/2023/xml/23135285/1693751512379-a1d7ac47-b46e-4956-b608-1485256184a8.xml)
+[settings.xml](https://www.yuque.com/attachments/yuque/0/2023/xml/23135285/1693751512379-a1d7ac47-b46e-4956-b608-1485256184a8.xml)
 
 ```
 <mirror>

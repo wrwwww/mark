@@ -1,6 +1,6 @@
 ## 相关链接
 
-[下载地址](https://www.python.org/downloads/windows/)[📎python-3.12.3-amd64.exe.zip](https://www.yuque.com/attachments/yuque/0/2024/zip/23135285/1713417207923-36acddbb-4129-4a7d-9b39-b547b711137a.zip)
+[下载地址](https://www.python.org/downloads/windows/)[python-3.12.3-amd64.exe.zip](https://www.yuque.com/attachments/yuque/0/2024/zip/23135285/1713417207923-36acddbb-4129-4a7d-9b39-b547b711137a.zip)
 
 ## pip 换源
 
